@@ -42,6 +42,8 @@ class auth_plugin_openid extends auth_plugin_base {
         $openid = new LightOpenID($host);
         if ($openid->mode) {
             $attributes = $openid->getAttributes();
+	    // print all message into log 
+	    // error_log('user attri: ' . print_r($attributes, true));
             if ($openid->validate()) {
 				//將「http://」去除
                 $identity = rtrim(preg_replace("(^https?://)", "", $openid->identity), "/");
