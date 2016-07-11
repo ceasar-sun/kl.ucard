@@ -4,6 +4,9 @@
  * @package auth_openid
  * @author Eric Hsin
  * @license  
+ * @bug fix:
+ * 20160629 : Ceasar Sun
+ * 	* use 'construct' to initial main class. Avoid to PHP error in verbose mode 
  */
  
 defined('MOODLE_INTERNAL') || die();
@@ -13,7 +16,7 @@ require_once('lib/lightopenid/openid.php');
 class auth_plugin_openid extends auth_plugin_base {
 
     /**
-     * Constructor.
+     * Constructor: Fix via Ceasar 
      */
 
     public function __construct() {
