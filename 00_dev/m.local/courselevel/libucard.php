@@ -124,7 +124,8 @@ class UCard {
 		$this->arrayResults();
 		return $this->arrayedResult;
 	    }else{
-		return true;
+		return NULL;
+		#return true;
 	    }
 	}else{
 	    $this->lastError = mysqli_error($this->databaseLink);
@@ -164,9 +165,10 @@ class UCard {
     }
     // 'Arrays' multiple result
     private function arrayResults(){
-	if($this->records == 1){
+	/*if($this->records == 1){
 	    return $this->arrayResult();
 	}
+	*/
 	$this->arrayedResult = array();
 	while ($data = mysqli_fetch_assoc($this->result)){
 	    $this->arrayedResult[] = $data;

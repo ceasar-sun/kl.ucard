@@ -44,13 +44,16 @@ echo $OUTPUT->skip_link_target();
 
 ## your content /HTML here
 
-$db="ucard";
-$username="ucarduser";
-$password="ucardpasswd@mysql";
+$db = "ucard.test";
+$username = "ucarduser";
+$password = "ucardpasswd@mysql";
+$querylimit = 20; 
 
 $ucard = new UCard($db, $username, $password);
-$cardlogs = $ucard->listCardLogs();
-$course_level_html='<p>最新10筆場館打卡資訊</p>'."\n";
+$cardlogs = $ucard->listCardLogs($querylimit);	// By default "querylimit" is '10' if unset this parameter
+$logcount = count($cardlogs);
+
+$course_level_html="<p>最新$querylimit 筆場館打卡資訊</p>"."\n";
 $course_level_html.='<table width="700" border="1">'."\n";
 $course_level_html.='  <tr>    <td>id</td>    <td>cid</td>    <td>location</td>    <td>timestamp</td>  </tr>'."\n";
 for($i=0;$i<count($cardlogs);$i++){
@@ -62,13 +65,7 @@ for($i=0;$i<count($cardlogs);$i++){
     $course_level_html.="  </tr>\n";
 }
 $course_level_html.="</table>\n";
-
-# raw sql execute
-$sql = "SELECT count(id) FROM cardlog";
-$data = $ucard->runSQL($sql);
-//var_dump($data);
-$course_level_html.="<p>全部".$data['count(id)']."筆場館打卡資訊</p>\n";
-
+$course_level_html.="<p>全部".$logcount."筆場館打卡資訊</p>\n";
 
 ## end of your content /HTML
 echo $OUTPUT->box($course_level_html);
