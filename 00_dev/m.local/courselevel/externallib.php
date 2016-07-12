@@ -50,5 +50,56 @@ class local_courselevel_external extends external_api {
     }
 
 
+    /**
+     * Returns description of method parameters
+     * @return external_getlevel_parameters
+     */
+    public static function courseid_by_level_location_parameters() {
+	return new external_function_parameters(
+		array(
+		    'location' => new external_value(PARAM_INT, 'id of location/category'),
+		    'level' => new external_value(PARAM_INT, 'value of level')
+			)	
+		    );
+		}
+
+    /**
+     * The function itself
+     * @return string welcome message
+     */
+    public static function courseid_by_level_location($location, $level) {
+
+	//Parameters validation
+	$params = self::validate_parameters(self::courseid_by_level_location_parameters(),
+		array(
+		    'location' => $location,
+		    'level' => $level
+		    )
+		);
+
+	global $CFG;
+	global $DB;
+	require_once($CFG->dirroot . "/local/courselevel/lib.php");
+	
+	$courseids = get_courseid_by_level_location($params['location'], $params['level']);
+
+	return $courseids;
+    }
+
+    /**
+     * Returns description of method result value
+     * @return external_description
+     */
+    public static function courseid_by_level_location_returns() {
+	return new external_multiple_structure(
+		new external_single_structure(
+		    array(
+			'id' => new external_value(PARAM_INT, 'Course ID'),
+			)
+		    )
+		);
+    }
+
+
 
 }

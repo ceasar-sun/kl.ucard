@@ -9,6 +9,7 @@
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Course level activity belongs to"/>
         <FIELD NAME="level" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The Course Level" />
+        <FIELD NAME="location" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The Course location" />
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

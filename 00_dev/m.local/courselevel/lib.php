@@ -36,6 +36,20 @@ function categorynamebyid($categoryid){
     return $result;
 }
 
+function getlocation($categoryid){
+    global $CFG, $DB;
+    $result = "";
+    $table = 'course_categories';
+    $category_data = $DB->get_record($table, array('id'=>$categoryid));
+    if (!empty($category_data)){
+	$path = $category_data->path;
+	$path_id = explode("/", $path);
+	$result = $path_id[1];
+    }
+    return $result;
+}
+
+
 function recursivecategorynamebyid($categoryid){
     global $CFG, $DB;
     $result = "";
@@ -76,4 +90,20 @@ function get_level_by_courseid($courseid){
     $table = 'courselevel';
     $result = $DB->get_record($table, array('courseid'=>$courseid));
     return $result->level;
+}
+
+function get_courseid_by_level_location($location, $level){
+
+    global $CFG, $DB;
+    //$result[] = array('id'=>1);
+    //$result[] = array('id'=>2);
+    $result= array();
+    $table = 'courselevel';
+    $rs = $DB->get_records($table, array('location'=>$location, 'level'=>$level));
+    foreach ($rs as $cldata){
+	if (!empty($cldata)){
+	    $result[] = array('id'=>$cldata->courseid);
+	}
+    }
+    return $result;
 }
