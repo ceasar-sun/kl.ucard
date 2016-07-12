@@ -18,6 +18,7 @@
  * @package   local_courselevel
  * @copyright 2016 Thomas Tsai and Free Software Labs
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @author    Thomas Tsai, Ceasar Sun 
  */
 
 require_once(dirname(__FILE__) . '/../../config.php');
