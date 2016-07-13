@@ -27,6 +27,8 @@ class auth_plugin_openid extends auth_plugin_base {
 		set_config('field_updatelocal_firstname', 'onlogin', 'auth/openid');
 		set_config('field_updatelocal_lastname', 'onlogin', 'auth/openid');
 		set_config('field_updatelocal_email', 'onlogin', 'auth/openid');
+		// Add what field you want to receive by openID
+		set_config('field_updatelocal_idnumber', 'onlogin', 'auth/openid');
     }
 
     /**
@@ -43,7 +45,7 @@ class auth_plugin_openid extends auth_plugin_base {
         if ($openid->mode) {
             $attributes = $openid->getAttributes();
 	    // print all message into log 
-	    // error_log('user attri: ' . print_r($attributes, true));
+	    error_log('user attri: ' . print_r($attributes, true));
             if ($openid->validate()) {
 				//將「http://」去除
                 $identity = rtrim(preg_replace("(^https?://)", "", $openid->identity), "/");
@@ -72,11 +74,16 @@ class auth_plugin_openid extends auth_plugin_base {
             $email = '';
             if (isset($attributes['contact/email'])) $email = $attributes['contact/email'];
             if (isset($attributes['ext1_email'])) $email = $attributes['ext1_email'];
-	
+
+	    // 取得 guid 放入 idnumber 欄位
+	    // 因暫時無法取得 guid 資訊，用 birthday 測試用
+            $idnumber = '';
+            if (isset($attributes['birthDate'])) $idnumber = $attributes['birthDate'];
             return array(
                 'firstname' => mb_substr($name, 1, NULL, 'UTF-8'),
                 'lastname' => mb_substr($name, 0, 1, 'UTF-8'),
                 'email' => $email,
+                'idnumber' => $idnumber,
             );
         }
 
