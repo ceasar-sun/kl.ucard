@@ -124,7 +124,7 @@ class UCard {
 		$this->arrayResults();
 		return $this->arrayedResult;
 	    }else{
-		return NULL; // Fix by Ceasar
+		return NULL;
 		#return true;
 	    }
 	}else{
