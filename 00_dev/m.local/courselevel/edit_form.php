@@ -9,7 +9,18 @@ class courselevel_form extends moodleform {
 	global $DB;
 	$mform = $this->_form;
 	$categoryid = $this->_customdata['category'];
-	$rs = $DB->get_recordset('courselevel');
+	$rs = $DB->get_records('courselevel');
+	$level_check=function($val){
+	    global $DB;
+	    $categoryid = $this->_customdata['category'];
+	    $limit = $DB->count_records('course', array('category'=>$categoryid));
+	    if ((intval($val) > $limit) || (intval($val) <= 0)){
+		return false;
+	    } else {
+		return true;
+	    }
+	};
+	$limit = $DB->count_records('course', array('category'=>$categoryid));
 	foreach ($rs as $record) {
 	    $course = get_course($record->courseid);
 	    if ($course->category == $categoryid){
@@ -18,9 +29,9 @@ class courselevel_form extends moodleform {
 		$mform->addElement('text', $record->id, get_string("level", 'local_courselevel'));
 		$mform->setDefault($record->id,$record->level);
 		$mform->setType($record->id, PARAM_INT);
+		$mform->addRule($record->id, "level value error(1~$limit)", 'callback', $level_check, 'server', false, true);
 	    }
 	}
-	$rs->close();
 
 	$mform->addElement('hidden', 'save', 'yes');
 	$mform->setType('save', PARAM_TEXT);
@@ -39,7 +50,7 @@ class courselevel_form extends moodleform {
 	}
 	if (levelcheck($values) == 0){
 	    $errors['duplicatelevel']='duplicated level';
-	    echo $errors['duplicatelevel'];
+	    echo "<div class='felement ftext error'><span class='error'>".$errors['duplicatelevel']."</span></div>";
 	}
 	return $errors;
     }

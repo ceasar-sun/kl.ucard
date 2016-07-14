@@ -28,7 +28,7 @@ class UCard {
 	$this->database = $database;
 	$this->username = $username;
 	$this->password = $password;
-//	$this->hostname = $hostname.':'.$port;
+	//	$this->hostname = $hostname.':'.$port;
 	$this->hostname = $hostname;
 
 	$this->Connect($persistant);
@@ -124,7 +124,7 @@ class UCard {
 		$this->arrayResults();
 		return $this->arrayedResult;
 	    }else{
-		return NULL;
+		return NULL; // Fix by Ceasar
 		#return true;
 	    }
 	}else{
@@ -204,7 +204,6 @@ class UCard {
 	return $data;
     }
 
-
     public function getStudentID($cid){
 	$query = "select * from student_basic where cid=$cid";
 	//$data_sid = mysqli_query($query, $this->databaseLink);
@@ -231,42 +230,7 @@ class UCard {
     }
 
     public function getStudentLevel($sid, $location){
-	$query = "select level from student_level where sid = $sid and domain = $location";
-	$data = $this->executeSQL($query);
-	return $data['level'];
-    }
-
-    public function getCourseIDbylevel($level, $location){
-	$query = "select courseid from course_level where level=$level and domain=$location";
-	$data = $this->executeSQL($query);
-	if (count($data)>0){
-	    return $data['courseid'];
-	}else{
-	    return 0;
-	}
-    }
-
-    public function logRunningCourse($moodleid, $location, $courseid, $level){
-
-	$query = "INSERT INTO running_course (`id`, `moodleid`, `location`, `courseid`, `level`, `dtime`, `status`) VALUES (NULL, $moodleid, $location, $courseid, $level, CURRENT_TIMESTAMP, 0)";
-	$data = $this->executeSQL($query);
-    }
-
-    public function getRunningCourse($moodleid, $location){
-
-	$query = "SELECT * FROM `running_course` WHERE `moodleid`=$moodleid and `location`=$location and `status`=0";
-	$data = $this->executeSQL($query);
-	if (count($data)>0){
-	    return array($data['courseid'], $data['level']);
-	} else {
-	    return null;
-	}
-    }
-
-    public function upgradeCourse($moodleid, $location){
-
-	$query = "UPDATE `running_course` SET `status` = '1' WHERE `moodleid`=$moodleid and location=$location and status=0";
-	$data = $this->executeSQL($query);
+	return 1;
     }
 
     public function getMoodleIDbyStudentID($sid){
@@ -324,11 +288,16 @@ class UCard {
 	$all_course = $response;
 	$courses=array();
 	for ($i = 0; $i < count($all_course); $i++){
-	    //echo $all_course[$i]['id'];
-	    //echo "\n";
 	    array_push($courses, $all_course[$i]['id']);
 	}
 	return $courses;
+    }
+
+    public function getLevelbyCourse($courseid){
+	$params = array($courseid);
+	$api='course_level_get_level';
+	$response = $this->executeMoodleAPI($api, $params);
+	return $response;
     }
 
     public function getCoursesbyLevelLocation($level, $location){
@@ -338,20 +307,50 @@ class UCard {
 	$all_course = $response;
 	$courses=array();
 	for ($i = 0; $i < count($all_course); $i++){
-	    //echo $all_course[$i]['id'];
-	    //echo "\n";
 	    array_push($courses, $all_course[$i]['id']);
 	}
 	return $courses;
     }
 
     public function getCompletionStatus($course, $user){
-	
+
 	$params = array($course, $user);
 	$api='core_completion_get_course_completion_status';
 	$response = $this->executeMoodleAPI($api, $params);
-	
+
 	return $response['completionstatus']['completed'];
+
+    }
+
+    public function getNameofCourse($courseid){
+
+	$params = array(array('ids'=>array($courseid)));
+	$api='core_course_get_courses';
+	$response = $this->executeMoodleAPI($api, $params);
+	$name = $response[0]['fullname']."-".$response[0]['shortname'];
+
+	return $name;
+    }
+    public function getTrackbyCourse($courseid){
+
+	$params = array(array('ids'=>array($courseid)));
+	$api='core_course_get_courses';
+	$response = $this->executeMoodleAPI($api, $params);
+	$name = $response[0]['categoryid'];
+
+	return $name;
+    }
+    public function upgradeCourse($moodleid, $courseid, $location){
+
+	$level = $this->getLevelbyCourse($courseid);
+	$level = $level+1;
+	$track = $this->getTrackbyCourse($courseid);
+	$newcourseids = $this->getCoursesbyLevelLocation($level, $location);
+	foreach ($newcourseids as $newcourseid){
+	    if ($this->getTrackbyCourse($newcourseid) === $track){
+		$this->registCourse($moodleid, $newcourseid);
+	    }
+	}
 
     }
 }

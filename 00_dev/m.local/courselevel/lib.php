@@ -24,6 +24,17 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+function init_ucard_nav($PAGE){
+    global $CFG, $DB;
+    
+    $ucard_navbar = $PAGE->navigation->add('UCARD' , new moodle_url('/local/courselevel/index.php'));
+    $navbar_courselevel = $ucard_navbar->add('courselevel' , new moodle_url('/local/courselevel/index.php'));
+    $navbar_courselevel_change = $navbar_courselevel->add('change' , null);
+    $navbar_cardlogs = $ucard_navbar->add('card logs' , new moodle_url('/local/courselevel/card_logs.php'));
+    $navbar_student = $ucard_navbar->add('student course' , new moodle_url('/local/courselevel/student_courses.php'));
+    return $ucard_navbar;
+}
+
 function categorynamebyid($categoryid){
 
     global $CFG, $DB;

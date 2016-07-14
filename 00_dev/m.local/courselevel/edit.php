@@ -40,6 +40,8 @@ $PAGE->set_pagelayout('standard');
 $PAGE->set_url(new moodle_url('/local/courselevel/edit.php'));
 $PAGE->set_title(get_string('welcome', 'local_courselevel')); 
 
+$navbar = init_ucard_nav($PAGE);
+
 echo $OUTPUT->header(); 
 echo $OUTPUT->skip_link_target();
 $categoryid = required_param('category', PARAM_INT);

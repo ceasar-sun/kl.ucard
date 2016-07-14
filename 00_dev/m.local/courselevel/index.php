@@ -21,6 +21,7 @@
  */
 
 require_once(dirname(__FILE__) . '/../../config.php');
+require_once($CFG->libdir.'/tablelib.php');
 require_once('lib.php');
 
 $site = get_site();
@@ -38,6 +39,7 @@ $PAGE->set_heading($site->fullname);
 $PAGE->set_url(new moodle_url('/local/courselevel/index.php'));
 $PAGE->set_title(get_string('courseleveltitle', 'local_courselevel')); 
 
+$navbar = init_ucard_nav($PAGE);
 echo $OUTPUT->header(); 
 echo $OUTPUT->skip_link_target();
 $table = "courselevel";
@@ -53,7 +55,19 @@ foreach ($rs as $level_rs) {
     $num++;
 }
 
-$course_level_html="<table width=\"80%\"><tr><th>".get_string('location', 'local_courselevel')."->".get_string('track', 'local_courselevel')."</th><th>".get_string('course').get_string('name', 'local_courselevel')."</th><th>".get_string('level', 'local_courselevel')."</th><th>".get_string('edit', 'local_courselevel')."</th></tr>\n";
+//$course_level_html="<table width=\"80%\"><tr><th>".get_string('location', 'local_courselevel')."->".get_string('track', 'local_courselevel')."</th><th>".get_string('course').get_string('name', 'local_courselevel')."</th><th>".get_string('level', 'local_courselevel')."</th><th>".get_string('edit', 'local_courselevel')."</th></tr>\n";
+$table = new flexible_table('Course Level Setup');
+
+$table->define_baseurl(new moodle_url("/local/courselevel/index.php"));
+$table->define_columns(array('location', 'track', 'coursename', 'level'));
+$table->define_headers(array(
+	    get_string('location', 'local_courselevel')." -> ".get_string('track', 'local_courselevel'),
+	    get_string('course', 'local_courselevel'),
+	    get_string('level', 'local_courselevel'),
+	    get_string('change', 'local_courselevel')
+));
+$table->sortable(true);
+$table->setup();
 foreach ($courses as $course){
     $category = recursivecategorynamebyid($course->category);
     $location = getlocation($course->category);
@@ -83,10 +97,10 @@ foreach ($courses as $course){
     }
     $resu = get_courseid_by_level_location(10, 1);
     $editlevelurl = new moodle_url('/local/courselevel/edit.php', array('category'=>$categoryid));
-    $levelrecord = "<tr><td>$category</td><td>$name</td><td>$level</td><td><a href=$editlevelurl>".get_string('change', 'local_courselevel')."</a></td></tr>\n";
-    $course_level_html.=$levelrecord;
+    $editlink = "<a href=\"$editlevelurl\" \"title=change\">".get_string('change', 'local_courselevel')."</a>";
+    $table->add_data(array($category, $name, $level, $editlink));
 }
-$course_level_html.="</table>\n";
+$table->print_html();
 // delete removed course level
 foreach ($course_level_rs as $record_rs) {
     $course = $DB->get_record('course', array('id' => $record_rs['courseid']), '*');
@@ -95,5 +109,4 @@ foreach ($course_level_rs as $record_rs) {
     }
 }
 
-echo $OUTPUT->box($course_level_html);
 echo $OUTPUT->footer();
