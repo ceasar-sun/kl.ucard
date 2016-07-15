@@ -1,12 +1,13 @@
 <?php
 
 /**
- * courselevel external file
+ * @Func:       courselevel external file
+ * @License:    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @Author:     Thomas, Ceasar
+ * @Note:       First released in 2016/7/15              
  *
- * @package    local_courselevel
- * @copyright  20XX YOURSELF
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+*/
+
 require_once($CFG->libdir . "/externallib.php");
 
 class local_courselevel_external extends external_api {
@@ -33,7 +34,7 @@ class local_courselevel_external extends external_api {
 
 	global $CFG;
 	global $DB;
-	require_once($CFG->dirroot . "/local/courselevel/lib.php");
+	require_once($CFG->dirroot . "/local/ucard/lib.php");
 
 	
 	$level = get_level_by_courseid($params['courseid']);
@@ -79,7 +80,7 @@ class local_courselevel_external extends external_api {
 
 	global $CFG;
 	global $DB;
-	require_once($CFG->dirroot . "/local/courselevel/lib.php");
+	require_once($CFG->dirroot . "/local/ucard/lib.php");
 	
 	$courseids = get_courseid_by_level_location($params['location'], $params['level']);
 

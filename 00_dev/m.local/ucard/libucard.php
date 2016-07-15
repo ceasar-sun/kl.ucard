@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * @Func:       ucard 函式庫 
+ * @License:    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @Author:     Thomas Tsai, Ceasar Sun 
+ * @Note:              
+ *
+*/
+
+
 class UCard {
 
     public  $lastError;         // Holds the last error

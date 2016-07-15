@@ -1,24 +1,12 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package   local_courselevel
- * @copyright 2016 Thomas Tsai and Free Software Labs
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+ * @Func:       顯示打卡記錄
+ * @License:    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @Author:     Thomas, Ceasar 
+ * @Note:       First released in 2016/7/15              
+ *
+*/
 
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once($CFG->libdir.'/tablelib.php');
@@ -32,15 +20,15 @@ if ($CFG->forcelogin) {
     require_login();
 }
 $context = context_system::instance();
-require_capability('local/courselevel:view', $context);
+require_capability('local/ucard:view', $context);
 global $CFG;
 global $UCARD_CFG;
 global $DB;
 
 $PAGE->set_context($context); 
 $PAGE->set_heading($site->fullname);
-$PAGE->set_url(new moodle_url('/local/courselevel/card_logs.php'));
-$PAGE->set_title(get_string('courseleveltitle', 'local_courselevel')); 
+$PAGE->set_url(new moodle_url('/local/ucard/card_logs.php'));
+$PAGE->set_title(get_string('courseleveltitle', 'local_ucard')); 
 
 $navbar = init_ucard_nav($PAGE);
 echo $OUTPUT->header(); 
@@ -60,7 +48,7 @@ $logcount = count($cardlogs);
 echo $OUTPUT->box("<p>最新 $querylimit 筆場館打卡資訊</p>\n");
 
 $table = new flexible_table('Card Logs');
-$table->define_baseurl(new moodle_url("/local/courselevel/card_logs.php"));
+$table->define_baseurl(new moodle_url("/local/ucard/card_logs.php"));
 $table->define_columns(array("id", "cid", "location", "timestamp"));
 $table->define_headers(array("id", "cid", "location", "timestamp"));
 $table->sortable(true);

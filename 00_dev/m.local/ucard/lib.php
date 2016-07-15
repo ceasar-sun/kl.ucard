@@ -1,37 +1,25 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Library of useful functions
+ * @Func:       Ucard plugin main useful function
+ * @License:    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @Author:     Ceasar Sun, Thomas Tsai 
+ * @Note:       First released in 2016/7/15              
  *
- * @copyright 1999 Martin Dougiamas  http://dougiamas.com
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @package core_course
- */
+*/
 
 defined('MOODLE_INTERNAL') || die;
 
 function init_ucard_nav($PAGE){
     global $CFG, $DB;
-    
-    $ucard_navbar = $PAGE->navigation->add('UCARD' , new moodle_url('/local/courselevel/index.php'));
-    $navbar_courselevel = $ucard_navbar->add('courselevel' , new moodle_url('/local/courselevel/index.php'));
-    $navbar_courselevel_change = $navbar_courselevel->add('change' , null);
-    $navbar_cardlogs = $ucard_navbar->add('card logs' , new moodle_url('/local/courselevel/card_logs.php'));
-    $navbar_student = $ucard_navbar->add('student course' , new moodle_url('/local/courselevel/student_courses.php'));
+    $ucard_navbar = $PAGE->navigation->add(get_string("UCARD_MENU",'local_ucard'), new moodle_url('/local/ucard/index.php'));
+    //$ucard_navbar = $PAGE->navigation->add('UCARD', new moodle_url('/local/ucard/index.php'));
+    $navbar_courselevel = $ucard_navbar->add(get_string("COURSE_LEVEL",'local_ucard') , new moodle_url('/local/ucard/index.php'));
+    //$navbar_courselevel = $ucard_navbar->add('courselevel' , new moodle_url('/local/ucard/index.php'));
+    //$navbar_courselevel_change = $navbar_courselevel->add('change' , null);
+    $navbar_cardlogs = $ucard_navbar->add(get_string("CARD_LOGS",'local_ucard') , new moodle_url('/local/ucard/card_logs.php'));
+    $navbar_student = $ucard_navbar->add(get_string("STUD_COURSE",'local_ucard')  , new moodle_url('/local/ucard/student_courses.php'));
+    //$navbar_student = $ucard_navbar->add('student course' , new moodle_url('/local/ucard/student_courses.php'));
     return $ucard_navbar;
 }
 

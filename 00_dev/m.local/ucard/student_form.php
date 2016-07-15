@@ -1,4 +1,13 @@
 <?php
+
+/**
+ * @Func:       
+ * @License:    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @Author:     Thomas Tsai 
+ * @Note:
+ *
+*/
+
 defined('MOODLE_INTERNAL') || die;
 require_once("$CFG->libdir/formslib.php");
 require_once("lib.php");

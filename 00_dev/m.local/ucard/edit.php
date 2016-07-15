@@ -1,24 +1,13 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.If not, see <http://www.gnu.org/licenses/>.
-
 /**
+ * @Func:       取用 ucard 資料庫的全域設定
+ * @License:    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @Author:     Thomas Tsai
  * @package   local_courselevel
  * @copyright 2016 Thomas Tsai and Free Software Labs
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+ * @Note:       First released in 2016/7/15              
+ *
+*/
 
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once('edit_form.php');
@@ -29,7 +18,7 @@ if ($CFG->forcelogin) {
     require_login();
 }
 $context = context_system::instance();
-require_capability('local/courselevel:change', $context);
+require_capability('local/ucard:change', $context);
 global $CFG;
 global $DB;
 //$DB->set_debug(true);
@@ -37,8 +26,8 @@ global $DB;
 $PAGE->set_context($context); 
 $PAGE->set_heading($site->fullname);
 $PAGE->set_pagelayout('standard');
-$PAGE->set_url(new moodle_url('/local/courselevel/edit.php'));
-$PAGE->set_title(get_string('welcome', 'local_courselevel')); 
+$PAGE->set_url(new moodle_url('/local/ucard/edit.php'));
+$PAGE->set_title(get_string('welcome', 'local_ucard')); 
 
 $navbar = init_ucard_nav($PAGE);
 
@@ -50,7 +39,7 @@ $table = 'courselevel';
 $level_form = new courselevel_form(null, array('category'=>$categoryid));
 
 if ($level_form->is_cancelled()) {
-    $courselevelurl = new moodle_url('/local/courselevel/index.php');
+    $courselevelurl = new moodle_url('/local/ucard/index.php');
     redirect($courselevelurl);
 } else if ($data = $level_form->get_data()) {
     $rs = $DB->get_recordset('courselevel');
@@ -65,7 +54,7 @@ if ($level_form->is_cancelled()) {
 	    }
 	}
 
-	$courselevelurl = new moodle_url('/local/courselevel/index.php');
+	$courselevelurl = new moodle_url('/local/ucard/index.php');
 	redirect($courselevelurl);
     }
     $rs->close();

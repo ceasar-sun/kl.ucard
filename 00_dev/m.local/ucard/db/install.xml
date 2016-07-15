@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/courselevel/db" VERSION="20160616" COMMENT="XMLDB file for Moodle local/courselevel"
+<XMLDB PATH="local/ucard/db" VERSION="20160715" COMMENT="XMLDB file for Moodle local/ucard"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-    <TABLE NAME="courselevel" COMMENT="Default comment for courselevel, please edit me">
+    <TABLE NAME="courselevel" COMMENT="Course level table">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Course level activity belongs to"/>

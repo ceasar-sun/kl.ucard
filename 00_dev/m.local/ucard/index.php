@@ -1,24 +1,12 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package   local_courselevel
- * @copyright 2016 Thomas Tsai and Free Software Labs
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+ * @Func:       課程階層管理介面
+ * @License:    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @Author:     Thoomas Tsai , Ceasar Sun
+ * @Note:                     
+ *
+*/
 
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once($CFG->libdir.'/tablelib.php');
@@ -30,14 +18,14 @@ if ($CFG->forcelogin) {
     require_login();
 }
 $context = context_system::instance();
-require_capability('local/courselevel:change', $context);
+require_capability('local/ucard:change', $context);
 global $CFG;
 global $DB;
 
 $PAGE->set_context($context); 
 $PAGE->set_heading($site->fullname);
-$PAGE->set_url(new moodle_url('/local/courselevel/index.php'));
-$PAGE->set_title(get_string('courseleveltitle', 'local_courselevel')); 
+$PAGE->set_url(new moodle_url('/local/ucard/index.php'));
+$PAGE->set_title(get_string('courseleveltitle', 'local_ucard')); 
 
 $navbar = init_ucard_nav($PAGE);
 echo $OUTPUT->header(); 
@@ -55,16 +43,15 @@ foreach ($rs as $level_rs) {
     $num++;
 }
 
-//$course_level_html="<table width=\"80%\"><tr><th>".get_string('location', 'local_courselevel')."->".get_string('track', 'local_courselevel')."</th><th>".get_string('course').get_string('name', 'local_courselevel')."</th><th>".get_string('level', 'local_courselevel')."</th><th>".get_string('edit', 'local_courselevel')."</th></tr>\n";
 $table = new flexible_table('Course Level Setup');
 
-$table->define_baseurl(new moodle_url("/local/courselevel/index.php"));
+$table->define_baseurl(new moodle_url("/local/ucard/index.php"));
 $table->define_columns(array('location', 'track', 'coursename', 'level'));
 $table->define_headers(array(
-	    get_string('location', 'local_courselevel')." -> ".get_string('track', 'local_courselevel'),
-	    get_string('course', 'local_courselevel'),
-	    get_string('level', 'local_courselevel'),
-	    get_string('change', 'local_courselevel')
+	    get_string('location', 'local_ucard')." -> ".get_string('track', 'local_ucard'),
+	    get_string('course', 'local_ucard'),
+	    get_string('level', 'local_ucard'),
+	    get_string('change', 'local_ucard')
 ));
 $table->sortable(true);
 $table->setup();
@@ -77,9 +64,11 @@ foreach ($courses as $course){
     if ($categoryid == 0){
 	continue;
     }
+
     $name = $course->fullname." - ".$course->shortname;
     $levelrecord = "";
     $level = -1;
+
     foreach ($course_level_rs as $record) {
 	if ($record['courseid'] === $course->id){
 	    $level = $record['level'];
@@ -88,16 +77,19 @@ foreach ($courses as $course){
 	    break;
 	}
     }
+
     if (($curlocation != $location) && ($level != -1)){
 	$DB->update_record($table, array('id'=>$curid, 'location'=>$location));
     }
+
     if ($level == -1){
 	$DB->insert_record($table,array('courseid'=>$course->id, 'level'=>0, 'location'=>$location));
 	$level = 0;
     }
+
     $resu = get_courseid_by_level_location(10, 1);
-    $editlevelurl = new moodle_url('/local/courselevel/edit.php', array('category'=>$categoryid));
-    $editlink = "<a href=\"$editlevelurl\" \"title=change\">".get_string('change', 'local_courselevel')."</a>";
+    $editlevelurl = new moodle_url('/local/ucard/edit.php', array('category'=>$categoryid));
+    $editlink = "<a href=\"$editlevelurl\" \"title=change\">".get_string('change', 'local_ucard')."</a>";
     $table->add_data(array($category, $name, $level, $editlink));
 }
 $table->print_html();

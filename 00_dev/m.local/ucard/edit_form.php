@@ -25,8 +25,8 @@ class courselevel_form extends moodleform {
 	    $course = get_course($record->courseid);
 	    if ($course->category == $categoryid){
 
-		$mform->addElement('header', null, get_string("updatelevelof", 'local_courselevel', $course->fullname));
-		$mform->addElement('text', $record->id, get_string("level", 'local_courselevel'));
+		$mform->addElement('header', null, get_string("updatelevelof", 'local_ucard', $course->fullname));
+		$mform->addElement('text', $record->id, get_string("level", 'local_ucard'));
 		$mform->setDefault($record->id,$record->level);
 		$mform->setType($record->id, PARAM_INT);
 		$mform->addRule($record->id, "level value error(1~$limit)", 'callback', $level_check, 'server', false, true);
