@@ -32,8 +32,8 @@ function list_cid_courses($cid, $location){
     $levelcourseids = $ucard->getCoursesbyLevelLocation($level, $location);
     $moodleid = $ucard->getMoodleIDbyStudentID($sid);
     $usercourses = $ucard->getUserCourses($moodleid);
-    $courseids = array_merge($levelcourseids, $usercourses);
-    $courseids = array_unique($courseids);
+    $courseids_all = array_merge($levelcourseids, $usercourses);
+    $courseids = array_unique($courseids_all);
     $html = "<p>";
     $html .= "卡號：$cid<br>\n";
     $html .= "學號：$sid<br>\n";

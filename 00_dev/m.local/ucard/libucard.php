@@ -242,13 +242,19 @@ class UCard {
 	return 1;
     }
 
-    public function getMoodleIDbyStudentID($sid){
+    public function getMoodleUserbyStudentID($sid){
 	$search['key']="idnumber";
 	$search['value']=$sid;
 	$api='core_user_get_users';
 	$params = array(array($search));
 	$response = $this->executeMoodleAPI($api, $params);
-	$moodleid = $response['users'][0]['id'];
+	$data = $response['users'][0];
+	return $data;
+    }
+
+    public function getMoodleIDbyStudentID($sid){
+	$response = $this->getMoodleUserbyStudentID($sid);
+	$moodleid = $response['id'];
 	return $moodleid;
     }
 
@@ -291,7 +297,7 @@ class UCard {
     }
 
     public function getUserCourses($moodleid){
-	$params = 6;
+	$params = $moodleid;
 	$api='core_enrol_get_users_courses';
 	$response = $this->executeMoodleAPI($api, $params);
 	$all_course = $response;
@@ -326,7 +332,10 @@ class UCard {
 	$params = array($course, $user);
 	$api='core_completion_get_course_completion_status';
 	$response = $this->executeMoodleAPI($api, $params);
-
+	if (array_key_exists('faultCode', $response)){
+	    echo "課程 $course 錯誤: $response[faultString]($response[faultCode])<br>\n";
+	    return false;
+	}
 	return $response['completionstatus']['completed'];
 
     }
