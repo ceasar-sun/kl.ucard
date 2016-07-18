@@ -3,7 +3,7 @@
 /**
  * @Func:       顯示打卡記錄
  * @License:    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @Author:     Thomas, Ceasar 
+ * @Author:     Thomas Tsai, Ceasar Sun 
  * @Note:       First released in 2016/7/15              
  *
 */

@@ -43,18 +43,26 @@ foreach ($rs as $level_rs) {
     $num++;
 }
 
-$table = new flexible_table('Course Level Setup');
+$table_html = new flexible_table('Course Level Setup');
 
-$table->define_baseurl(new moodle_url("/local/ucard/index.php"));
-$table->define_columns(array('location', 'track', 'coursename', 'level'));
-$table->define_headers(array(
+$table_html->define_baseurl(new moodle_url("/local/ucard/index.php"));
+$table_html->define_columns(array('location', 'track', 'coursename', 'level'));
+$table_html->define_headers(array(
 	    get_string('location', 'local_ucard')." -> ".get_string('track', 'local_ucard'),
 	    get_string('course', 'local_ucard'),
 	    get_string('level', 'local_ucard'),
 	    get_string('change', 'local_ucard')
 ));
-$table->sortable(true);
-$table->setup();
+/*
+$table_html->define_headers(array(
+	    'location -> track',
+	    'course',
+	    'level',
+	    'change'
+));
+*/
+$table_html->sortable(true);
+$table_html->setup();
 foreach ($courses as $course){
     $category = recursivecategorynamebyid($course->category);
     $location = getlocation($course->category);
@@ -64,11 +72,9 @@ foreach ($courses as $course){
     if ($categoryid == 0){
 	continue;
     }
-
     $name = $course->fullname." - ".$course->shortname;
     $levelrecord = "";
     $level = -1;
-
     foreach ($course_level_rs as $record) {
 	if ($record['courseid'] === $course->id){
 	    $level = $record['level'];
@@ -77,11 +83,9 @@ foreach ($courses as $course){
 	    break;
 	}
     }
-
     if (($curlocation != $location) && ($level != -1)){
 	$DB->update_record($table, array('id'=>$curid, 'location'=>$location));
     }
-
     if ($level == -1){
 	$DB->insert_record($table,array('courseid'=>$course->id, 'level'=>0, 'location'=>$location));
 	$level = 0;
@@ -90,9 +94,9 @@ foreach ($courses as $course){
     $resu = get_courseid_by_level_location(10, 1);
     $editlevelurl = new moodle_url('/local/ucard/edit.php', array('category'=>$categoryid));
     $editlink = "<a href=\"$editlevelurl\" \"title=change\">".get_string('change', 'local_ucard')."</a>";
-    $table->add_data(array($category, $name, $level, $editlink));
+    $table_html->add_data(array($category, $name, $level, $editlink));
 }
-$table->print_html();
+$table_html->print_html();
 // delete removed course level
 foreach ($course_level_rs as $record_rs) {
     $course = $DB->get_record('course', array('id' => $record_rs['courseid']), '*');
