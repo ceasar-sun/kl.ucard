@@ -19,11 +19,11 @@ class student_form extends moodleform {
 	global $DB;
 	$mform = $this->_form;
 
-	$mform->addElement('header', null, 'cid');
-	$mform->addElement('text', 'cid');
-	$mform->setType('cid', PARAM_TEXT);
-	$mform->setDefault('cid', '10531247230');
-	$mform->addRule('cid', get_string('error'), 'required', null, 'client');
+	$mform->addElement('header', null, 'rfid_key16');
+	$mform->addElement('text', 'rfid_key16');
+	$mform->setType('rfid_key16', PARAM_TEXT);
+	$mform->setDefault('rfid_key16', '10531247230');
+	$mform->addRule('rfid_key16', get_string('error'), 'required', null, 'client');
 
 	$mform->addElement('header', null, 'location');
 	$mform->addElement('text', 'location');
