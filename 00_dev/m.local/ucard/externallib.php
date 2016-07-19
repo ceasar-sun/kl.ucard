@@ -50,6 +50,45 @@ class local_courselevel_external extends external_api {
 	return new external_value(PARAM_TEXT, 'The welcome message + user first name');
     }
 
+    /**
+     * Returns description of method parameters
+     * @return external_getlevel_parameters
+     */
+    public static function getnextcourse_parameters() {
+	return new external_function_parameters(
+		array('courseid' => new external_value(PARAM_INT, 'id of course'))
+		);
+    }
+
+
+    /**
+     * The function itself
+     * @return string welcome message
+     */
+    public static function getnextcourse($courseid) {
+
+	//Parameters validation
+	$params = self::validate_parameters(self::getnextcourse_parameters(),
+		array('courseid' => $courseid));
+
+	global $CFG;
+	global $DB;
+	require_once($CFG->dirroot . "/local/ucard/lib.php");
+
+	
+	$courseid = get_next_level_courseid($params['courseid']);
+
+	return $courseid;
+    }
+
+    /**
+     * Returns description of method result value
+     * @return external_description
+     */
+    public static function getnextcourse_returns() {
+	return new external_value(PARAM_INT, 'the next level of courseid');
+    }
+
 
     /**
      * Returns description of method parameters

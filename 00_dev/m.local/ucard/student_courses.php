@@ -15,27 +15,28 @@ require_once('lib.php');
 require_once("libucard.php");
 
 // functions
+$db = $UCARD_CFG->dbname;
+$username = $UCARD_CFG->dbuser;
+$password = $UCARD_CFG->dbpass;
 
-function list_cid_courses($cid, $location){
-    $db = $UCARD_CFG->dbname;
-    $username = $UCARD_CFG->dbuser;
-    $password = $UCARD_CFG->dbpass;
+$token = $UCARD_CFG->token;		// '851fc9fb3410e174ff156b65689f6922';
+$server = $UCARD_CFG->server; 	//'http://moodle.nchc.org.tw';
+$dir = $UCARD_CFG->dir;		//'/moodle';
 
-    $token = $UCARD_CFG->token;		// '851fc9fb3410e174ff156b65689f6922';
-    $server = $UCARD_CFG->server; 	//'http://moodle.nchc.org.tw';
-    $dir = $UCARD_CFG->dir;		//'/moodle';
+$ucard = new UCard($db, $username, $password);
+$ucard->init_moodle($token, $server, $dir);
 
-    $ucard = new UCard($db, $username, $password);
-    $ucard->init_moodle($token, $server, $dir);
-    $sid = $ucard->getStudentID($cid);
+function list_rfid_key16_courses($rfid_key16, $location){
+    global $ucard;
+    $sid = $ucard->getStudentID($rfid_key16);
     $level = $ucard->getStudentLevel($sid, $location);
     $levelcourseids = $ucard->getCoursesbyLevelLocation($level, $location);
     $moodleid = $ucard->getMoodleIDbyStudentID($sid);
     $usercourses = $ucard->getUserCourses($moodleid);
-    $courseids = array_merge($levelcourseids, $usercourses);
-    $courseids = array_unique($courseids);
+    $courseids_all = array_merge($levelcourseids, $usercourses);
+    $courseids = array_unique($courseids_all);
     $html = "<p>";
-    $html .= "卡號：$cid<br>\n";
+    $html .= "卡號：$rfid_key16<br>\n";
     $html .= "學號：$sid<br>\n";
     $html .= "moodle帳號id：$moodleid<br>\n";
     $html .= "學年：$level<br>\n";
@@ -88,7 +89,7 @@ $navbar = init_ucard_nav($PAGE);
 
 echo $OUTPUT->header(); 
 echo $OUTPUT->skip_link_target();
-$cid = optional_param('cid', 0, PARAM_INT);
+$rfid_key16 = optional_param('rfid_key16', 0, PARAM_INT);
 $location = optional_param('location', 0, PARAM_INT);
 $s_form = new student_form(null);
 
@@ -96,9 +97,9 @@ if ($s_form->is_cancelled()) {
     $courselevelurl = new moodle_url('/local/ucard/student_courses.php');
     redirect($courselevelurl);
 } else if ($data = $s_form->get_data()) {
-    $cid = $data->cid;
+    $rfid_key16 = $data->rfid_key16;
     $location = $data->location;
-    $list_course_html = list_cid_courses($cid, $location);
+    $list_course_html = list_rfid_key16_courses($rfid_key16, $location);
     echo $OUTPUT->box($list_course_html);
 } else {
     echo $s_form->is_validated();

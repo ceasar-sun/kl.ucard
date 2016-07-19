@@ -49,12 +49,12 @@ echo $OUTPUT->box("<p>最新 $querylimit 筆場館打卡資訊</p>\n");
 
 $table = new flexible_table('Card Logs');
 $table->define_baseurl(new moodle_url("/local/ucard/card_logs.php"));
-$table->define_columns(array("id", "cid", "location", "timestamp"));
-$table->define_headers(array("id", "cid", "location", "timestamp"));
+$table->define_columns(array("id", "rfid_key16", "location", "timestamp"));
+$table->define_headers(array("id", "rfid_key16", "location", "timestamp"));
 $table->sortable(true);
 $table->setup();
 for($i=0;$i<count($cardlogs);$i++){
-    $table->add_data(array($cardlogs[$i]['id'], $cardlogs[$i]['cid'], $cardlogs[$i]['location'], $cardlogs[$i]['dtime']));
+    $table->add_data(array($cardlogs[$i]['id'], $cardlogs[$i]['rfid_key16'], $cardlogs[$i]['location'], $cardlogs[$i]['dtime']));
 }
 $table->print_html();
 

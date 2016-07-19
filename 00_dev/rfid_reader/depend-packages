@@ -1,0 +1,29 @@
+# python modules
+python-requests
+python-pyscard
+python-sqlite
+
+# services
+pcscd
+
+# debug tools
+pcsc-tools
+
+# debug for readers
+thomas@T:~$ python
+Python 2.7.11+ (default, Apr 17 2016, 14:00:29) 
+[GCC 5.3.1 20160409] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> from smartcard.System import readers
+>>> from smartcard.util import toHexString
+>>> r=readers()
+>>> r
+['Alcor Micro AU9522 00 00', 'Alcor Micro AU9522 00 01', 'NXP PR533 (3.70) 01 00']
+>>> connection = r[2].createConnection()
+>>> connection.connect()
+>>> SELECT = [0xFF, 0xCA, 0x00, 0x00, 0x00]
+>>> data, sw1, sw2 = connection.transmit( SELECT )
+>>> print "%x %x" % (sw1, sw2)
+>>> data
+ [201, 164, 245, 230]
+

@@ -1,0 +1,2 @@
+http://moodle.nchc.org.tw//moodle/webservice/rest/server.php?wstoken=851fc9fb3410e174ff156b65689f6922&wsfunction=core_completion_get_course_completion_status&moodlewsrestformat=json&courseid=5&userid=6
+

@@ -15,7 +15,7 @@ defined('MOODLE_INTERNAL') || die();
  * @param int $oldversion The old version of the assign module
  * @return bool
  */
-function xmldb_local_courselevel_upgrade($oldversion) {
+function xmldb_local_ucard_upgrade($oldversion) {
     global $CFG, $DB;
 
     $dbman = $DB->get_manager();
@@ -31,8 +31,7 @@ function xmldb_local_courselevel_upgrade($oldversion) {
             $dbman->add_field($table, $field);
         }
 
-
-        upgrade_mod_savepoint(true, 2012102912, 'course');
+        upgrade_plugin_savepoint(true, 2016071915, 'tool', 'courselevel');
     }
     return true;
 }

@@ -122,7 +122,8 @@ class UCard {
     private function executeSQL($query){
 	$this->lastQuery = $query;
 	if($this->result = mysqli_query($this->databaseLink, $query)){
-	    //var_dump($this->result);
+	    #var_dump($query);
+	    #var_dump($this->result);
 	    if ($this->result == TRUE) {
 		$this->records  = @mysqli_num_rows($this->result);
 	    } else {
@@ -213,22 +214,21 @@ class UCard {
 	return $data;
     }
 
-    public function getStudentID($cid){
-	$query = "select * from student_basic where cid=$cid";
+    public function getStudentID($rfid_key16){
+	$query = "select * from semester_student where rfid_key16=$rfid_key16";
 	//$data_sid = mysqli_query($query, $this->databaseLink);
 	$data = $this->executeSQL($query);
-	$sid = "";
-	if ($data){
-	    $sid = $data['sid'];
+	$sid = true;
+	if ($data != false){
+	    return $data[0]['hashid'];
 	}else{
-	    $sid="no data";
+	    return null;
 	}
-	return $sid;
     }
 
-    public function logCardID($cid, $location){
+    public function logCardID($rfid_key16, $location){
 
-	$query = "INSERT INTO cardlog (`id`, `cid`, `location`, `dtime`) VALUES (NULL, $cid, $location, CURRENT_TIMESTAMP)";
+	$query = "INSERT INTO cardlog (`id`, `rfid_key16`, `location`, `dtime`) VALUES (NULL, $rfid_key16, $location, CURRENT_TIMESTAMP)";
 	$data = $this->executeSQL($query);
     }
 
@@ -242,13 +242,52 @@ class UCard {
 	return 1;
     }
 
-    public function getMoodleIDbyStudentID($sid){
+    public function logRunningCourse($moodleid, $location, $courseid, $level){
+
+	$testquery = "SELECT * FROM `running_course` WHERE `moodleid`=$moodleid and `courseid`=$courseid";
+	$testdata = $this->executeSQL($testquery);
+	if ($testdata == false){
+	    $query = "INSERT INTO running_course (`id`, `moodleid`, `location`, `courseid`, `level`, `dtime`, `status`) VALUES (NULL, $moodleid, $location, $courseid, $level, CURRENT_TIMESTAMP, 0)";
+	    $data = $this->executeSQL($query);
+	}
+    }
+
+    public function getRunningCourse($moodleid, $location = 0, $status = true){
+	if ($location != 0){
+	    $query = "SELECT * FROM `running_course` WHERE `moodleid`=$moodleid and `location`=$location";
+	}else{
+	    $query = "SELECT * FROM `running_course` WHERE `moodleid`=$moodleid";
+	}
+	if ($status == true){
+	     $query .= " and `status`=0";
+	}
+	$data = $this->executeSQL($query);
+	$courses=array();
+	for ($i = 0; $i < count($data); $i++){
+	    array_push($courses, $data[$i]['courseid']);
+	}
+	return $courses;
+    }
+    public function upgradeRunningCourse($moodleid, $courseid){
+
+	$query = "UPDATE `running_course` SET `status` = '1' WHERE `moodleid`=$moodleid and `courseid`=$courseid and status=0";
+	$data = $this->executeSQL($query);
+    }
+
+
+    public function getMoodleUserbyStudentID($sid){
 	$search['key']="idnumber";
 	$search['value']=$sid;
 	$api='core_user_get_users';
 	$params = array(array($search));
 	$response = $this->executeMoodleAPI($api, $params);
-	$moodleid = $response['users'][0]['id'];
+	$data = $response['users'][0];
+	return $data;
+    }
+
+    public function getMoodleIDbyStudentID($sid){
+	$response = $this->getMoodleUserbyStudentID($sid);
+	$moodleid = $response['id'];
 	return $moodleid;
     }
 
@@ -291,7 +330,7 @@ class UCard {
     }
 
     public function getUserCourses($moodleid){
-	$params = 6;
+	$params = $moodleid;
 	$api='core_enrol_get_users_courses';
 	$response = $this->executeMoodleAPI($api, $params);
 	$all_course = $response;
@@ -300,6 +339,13 @@ class UCard {
 	    array_push($courses, $all_course[$i]['id']);
 	}
 	return $courses;
+    }
+
+    public function getNextLevelbyCourse($courseid){
+	$params = array($courseid);
+	$api='course_level_get_next_level';
+	$response = $this->executeMoodleAPI($api, $params);
+	return $response;
     }
 
     public function getLevelbyCourse($courseid){
@@ -314,6 +360,7 @@ class UCard {
 	$api='course_level_id_by_level_location';
 	$response = $this->executeMoodleAPI($api, $params);
 	$all_course = $response;
+	//var_dump($response);
 	$courses=array();
 	for ($i = 0; $i < count($all_course); $i++){
 	    array_push($courses, $all_course[$i]['id']);
@@ -326,7 +373,10 @@ class UCard {
 	$params = array($course, $user);
 	$api='core_completion_get_course_completion_status';
 	$response = $this->executeMoodleAPI($api, $params);
-
+	if (array_key_exists('faultCode', $response)){
+	    echo "課程 $course 錯誤: $response[faultString]($response[faultCode])<br>\n";
+	    return "ERROR";
+	}
 	return $response['completionstatus']['completed'];
 
     }
@@ -349,17 +399,20 @@ class UCard {
 
 	return $name;
     }
+
+    public function getNextCourse($courseid){
+	$params = array($courseid);
+	$api='course_level_get_next_course';
+	$response = $this->executeMoodleAPI($api, $params);
+	return $response;
+    }
+
+
     public function upgradeCourse($moodleid, $courseid, $location){
 
-	$level = $this->getLevelbyCourse($courseid);
-	$level = $level+1;
-	$track = $this->getTrackbyCourse($courseid);
-	$newcourseids = $this->getCoursesbyLevelLocation($level, $location);
-	foreach ($newcourseids as $newcourseid){
-	    if ($this->getTrackbyCourse($newcourseid) === $track){
-		$this->registCourse($moodleid, $newcourseid);
-	    }
-	}
+	$newcourseid = $this->getNextCourse($courseid);
+	$this->registCourse($moodleid, $newcourseid);
+	return $newcourseid;
 
     }
 }

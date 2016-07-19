@@ -84,6 +84,33 @@ function levelcheck($data){
     }
 }
 
+function get_next_level_courseid($courseid){
+    global $CFG, $DB;
+
+    $current_level = get_level_by_courseid($courseid);
+    $coursetrack = $DB->get_record('course', array('id'=>$courseid));
+    $courseintrack=$DB->get_records('course', array('category'=>$coursetrack->category));
+    $trackcourses=array();
+    $courselevel=array();
+    foreach ($courseintrack as $track){
+	//$courses[$track->id] = get_level_by_courseid($track->id);
+	$level = get_level_by_courseid($track->id);
+	$courses[$level] = $track->id;
+    }
+    $rcourses = ksort($courses);
+    //var_dump($courses);
+    $i = 0;
+    foreach ($courses as $level => $id){
+	$i++;
+	if($level >  $current_level){
+	    $newcourseid = $id;
+	    break;
+	}
+    }
+    return $newcourseid;
+}
+
+
 function get_level_by_courseid($courseid){
     global $CFG, $DB;
     $table = 'courselevel';
