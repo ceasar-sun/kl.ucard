@@ -214,13 +214,20 @@ class UCard {
 	return $data;
     }
 
-    public function getStudentID($rfid_key16){
-	$query = "select * from semester_student where rfid_key16=$rfid_key16";
-	//$data_sid = mysqli_query($query, $this->databaseLink);
+    public function getID($rfid_key16){
+	$query = "select idno from semester_student where rfid_key16=\"$rfid_key16\"";
 	$data = $this->executeSQL($query);
-	$sid = true;
 	if ($data != false){
-	    return $data[0]['hashid'];
+	    return $data[0]['idno'];
+	}else{
+	    return null;
+	}
+    }
+
+    public function getStudentID($rfid_key16){ // for moodle idnumber
+	$idno = $this->getID($rfid_key16);
+	if ($idno != null){
+	    return hash('sha256', $idno);
 	}else{
 	    return null;
 	}
@@ -228,7 +235,7 @@ class UCard {
 
     public function logCardID($rfid_key16, $location){
 
-	$query = "INSERT INTO cardlog (`id`, `rfid_key16`, `location`, `dtime`) VALUES (NULL, $rfid_key16, $location, CURRENT_TIMESTAMP)";
+	$query = "INSERT INTO cardlog (`id`, `rfid_key16`, `location`, `dtime`) VALUES (NULL, \"$rfid_key16\", $location, CURRENT_TIMESTAMP)";
 	$data = $this->executeSQL($query);
     }
 
@@ -238,16 +245,33 @@ class UCard {
 	return $data;
     }
 
-    public function getStudentLevel($sid, $location){
-	return 1;
+    public function getStudentLevel($idno){
+	$query = "SELECT max(stdyear) as stdyer FROM semester_score WHERE idno=\"$idno\"";
+	$data = $this->executeSQL($query);
+	if ($data != false){
+	    return $data[0]['stdyer'];
+	}else{
+	    return null;
+	}
+
     }
 
-    public function logRunningCourse($moodleid, $location, $courseid, $level){
+    public function getRFIDKeyOut($rfid_key16){
+	$query = "select * from semester_student where rfid_key16=\"$rfid_key16\"";
+	$data = $this->executeSQL($query);
+	if ($data != false){
+	    return $data[0]['rfid_keyout'];
+	}else{
+	    return null;
+	}
+
+    }
+    public function logRunningCourse($moodleid, $rfid_keyout, $location, $courseid, $level){
 
 	$testquery = "SELECT * FROM `running_course` WHERE `moodleid`=$moodleid and `courseid`=$courseid";
 	$testdata = $this->executeSQL($testquery);
 	if ($testdata == false){
-	    $query = "INSERT INTO running_course (`id`, `moodleid`, `location`, `courseid`, `level`, `dtime`, `status`) VALUES (NULL, $moodleid, $location, $courseid, $level, CURRENT_TIMESTAMP, 0)";
+	    $query = "INSERT INTO running_course (`id`, `moodleid`, `rfid_keyout`, `location`, `courseid`, `level`, `dtime`, `status`) VALUES (NULL, $moodleid, \"$rfid_keyout\", $location, $courseid, $level, CURRENT_TIMESTAMP, 0)";
 	    $data = $this->executeSQL($query);
 	}
     }

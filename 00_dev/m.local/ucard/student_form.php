@@ -19,18 +19,24 @@ class student_form extends moodleform {
 	global $DB;
 	$mform = $this->_form;
 
-	$mform->addElement('header', null, 'rfid_key16');
-	$mform->addElement('text', 'rfid_key16');
-	$mform->setType('rfid_key16', PARAM_TEXT);
-	$mform->setDefault('rfid_key16', '10531247230');
-	$mform->addRule('rfid_key16', get_string('error'), 'required', null, 'client');
+	$mform->addElement('header', null, 'moodleid');
+	$mform->addElement('text', 'moodleid');
+	$mform->setType('moodleid', PARAM_TEXT);
+	$mform->setDefault('moodleid', '9');
+	$mform->addRule('moodleid', get_string('error'), 'required', null, 'client');
 
-	$mform->addElement('header', null, 'location');
-	$mform->addElement('text', 'location');
-	$mform->setType('location', PARAM_INT);
-	$mform->setDefault('location', 10);
-	$mform->addRule('location', get_string('error'), 'numeric', null, 'client');
-	$mform->addRule('location', get_string('error'), 'required', null, 'client');
+	$listlocations = listlocation();
+	$select_options = array(0=>'all');
+	foreach($listlocations as $location){
+	    $select_options[$location['id']] = $location['name'];
+	}
+//	$mform->addElement('header', null, 'location');
+//	$mform->addElement('select', 'location', 'location', $select_options);
+//	$mform->addElement('text', 'location');
+//	$mform->setType('location', PARAM_INT);
+//	$mform->setDefault('location', 10);
+//	$mform->addRule('location', get_string('error'), 'numeric', null, 'client');
+//	$mform->addRule('location', get_string('error'), 'required', null, 'client');
 
 	$this->add_action_buttons(true, 'search');
     }

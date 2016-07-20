@@ -48,6 +48,43 @@ function getlocation($categoryid){
     return $result;
 }
 
+function getlocationtrackbycourse($courseid){
+    global $CFG, $DB;
+    $result = "";
+    $table = 'course';
+    $course_data = $DB->get_record($table, array('id'=>$courseid));
+    if (!empty($course_data)){
+	return recursivecategorynamebyid($course_data->category);
+    }
+    return $result;
+}
+function getlocationbycourse($courseid){
+    global $CFG, $DB;
+    $result = "";
+    $table = 'course';
+    $course_data = $DB->get_record($table, array('id'=>$courseid));
+    if (!empty($course_data)){
+	$category = getlocation($course_data->category);
+	return categorynamebyid($category);
+    }
+    return $result;
+}
+function listlocation(){
+    global $CFG, $DB;
+    $result = "";
+    $table = 'course_categories';
+    $select = "parent = 0 AND id <> 1";
+    $category_data = $DB->get_records_select($table, $select);
+    if (!empty($category_data)){
+	foreach($category_data as $location_data){
+	    $location['id'] = $location_data->id;
+	    $location['name'] = $location_data->name;
+	    $result[] = $location;
+	}
+    }
+    return $result;
+}
+
 
 function recursivecategorynamebyid($categoryid){
     global $CFG, $DB;
