@@ -155,18 +155,46 @@ function get_level_by_courseid($courseid){
     return $result->level;
 }
 
+function get_track_by_courseid($courseid){
+    global $CFG, $DB;
+    $coursetrack = $DB->get_record('course', array('id'=>$courseid));
+    if (!empty($coursetrack)){
+	return $coursetrack->category;
+    }
+    return null;
+}
 function get_courseid_by_level_location($location, $level){
 
     global $CFG, $DB;
-    //$result[] = array('id'=>1);
-    //$result[] = array('id'=>2);
     $result= array();
+    $coursetrack = array();
     $table = 'courselevel';
-    $rs = $DB->get_records($table, array('location'=>$location, 'level'=>$level));
+    $rs = $DB->get_records($table, array('location'=>$location));
     foreach ($rs as $cldata){
 	if (!empty($cldata)){
-	    $result[] = array('id'=>$cldata->courseid);
+	    $track = get_track_by_courseid($cldata->courseid);
+	    $coursetrack[$track][$cldata->level] = $cldata->courseid;
 	}
     }
+    foreach ($coursetrack as $track){
+	ksort($track);
+	$nolevel = 0;
+	$min = 0;
+	foreach ($track as $courselevel => $id){
+	    if (($min == 0) && ($courselevel > $level)){
+		global $min;
+		$min = $id;
+	    }
+	    if ($courselevel == $level){
+		$result[] = array('id'=>$id);
+		global $nolevel;
+		$nolevel = 1;
+	    }
+	}
+	if($nolevel == 0){
+	    $result[] = array('id'=>$min);
+	}
+    }
+
     return $result;
 }

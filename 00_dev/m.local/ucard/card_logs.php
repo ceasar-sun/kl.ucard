@@ -30,6 +30,11 @@ $PAGE->set_heading($site->fullname);
 $PAGE->set_url(new moodle_url('/local/ucard/card_logs.php'));
 $PAGE->set_title(get_string('courseleveltitle', 'local_ucard')); 
 
+$token = $UCARD_CFG->token;		// '851fc9fb3410e174ff156b65689f6922';
+$server = $UCARD_CFG->server; 	//'http://moodle.nchc.org.tw';
+$dir = $UCARD_CFG->dir;		//'/moodle';
+
+
 $navbar = init_ucard_nav($PAGE);
 echo $OUTPUT->header(); 
 echo $OUTPUT->skip_link_target();
@@ -42,6 +47,7 @@ $password = $UCARD_CFG->dbpass;
 $querylimit = 20;
 
 $ucard = new UCard($db, $username, $password);
+$ucard->init_moodle($token, $server, $dir);
 $cardlogs = $ucard->listCardLogs($querylimit);
 $logcount = count($cardlogs);
 
@@ -59,7 +65,5 @@ for($i=0;$i<count($cardlogs);$i++){
 $table->print_html();
 
 echo $OUTPUT->box("<p>全部$logcount 筆場館打卡資訊</p>\n");
-
-
 ## end of your content /HTML
 echo $OUTPUT->footer();

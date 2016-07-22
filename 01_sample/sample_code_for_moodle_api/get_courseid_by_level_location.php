@@ -3,8 +3,8 @@ $token = '851fc9fb3410e174ff156b65689f6922';
 $server = 'http://moodle.nchc.org.tw';
 $dir = '/moodle'; // May be null if moodle runs in the root directory in the server.
 
-$level=1;
-$location=1;
+$level=2;
+$location=10;
 $request = xmlrpc_encode_request('course_level_id_by_level_location', array($location, $level), array('encoding'=>'UTF-8'));
 
 var_dump($request);  // In case you want to see XML.
