@@ -1,8 +1,8 @@
 <?php
  $host = 'localhost';
- $username = 'mmc';
- $password = 'mmc@mysql@ucard';
- $dbname = 'ucard';
+ $username = '';
+ $password = '';
+ $dbname = '';
  $con = mysqli_connect($host, $username, $password, $dbname) or die('Error in Connecting: ' . mysqli_error($con));
 
 // $idno = $argv[1];
