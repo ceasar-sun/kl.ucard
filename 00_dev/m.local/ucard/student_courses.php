@@ -47,8 +47,11 @@ function list_student_courses($moodleid){
 	} else {
 	    $coursestatus = "error/never regist?";
 	}
+
+	$coursename_url = new moodle_url('/course/view.php', array('id'=>$courseid));
+	$coursename_html = "<a href=\"$coursename_url\">".$ucard->getNameofCourse($courseid)."</a>";
 	$data = array(getlocationtrackbycourse($courseid),
-		      $ucard->getNameofCourse($courseid), 
+		      $coursename_html,
 		      $ucard->getLevelbyCourse($courseid),
 		      $coursestatus
 		      );
