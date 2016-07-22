@@ -30,23 +30,27 @@ $ucard->logCardID($cardid, $location);
 if ($debug == 1){
     $cardlogs = $ucard->listCardLogs();
 }
-$sid = $ucard->getStudentID($cardid);
+$sid = $ucard->getStudentID($cardid); // for moodle idnumber
+$rfid_keyout = $ucard->getRFIDKeyOut($cardid);
+$level = $ucard->getStudentLevel($ucard->getID($cardid));
 $status=0;
 if ($sid != NULL){
     $status=1;
+}
+
+if ($level == NULL){
+    $status=0;
 }
 if($status === 0 ){
     echo "{\"status\":\"$status\"}";
     exit(); 
 }
-$level = $ucard->getStudentLevel($sid, $location);
 $moodleuser = $ucard->getMoodleUserbyStudentID($sid);
 $moodleid = $moodleuser['id'];
 $levelcourseids = $ucard->getCoursesbyLevelLocation($level, $location);
 //$usercourses = $ucard->getUserCourses($moodleid);
 //$courseids_a = array_merge($levelcourseids, $usercourses);
 $userrunningcourses = $ucard->getRunningCourse($moodleid, $location, true);
-var_dump($userrunningcourses);
 $courseids_a = array_merge($levelcourseids, $userrunningcourses);
 $courseids = array_unique($courseids_a);
 if ($debug == 1){
@@ -99,7 +103,7 @@ foreach($courseids as $courseid){
 	if($debug==1){echo "completion: TRUE\n";}
 	$newcourseid = $ucard->upgradeCourse($moodleid, $courseid, $location);
 	$courselevel = $ucard->getLevelbyCourse($newcourseid);
-	$ucard->logRunningCourse($moodleid, $location, $newcourseid, $courselevel);
+	$ucard->logRunningCourse($moodleid, $rfid_keyout, $location, $newcourseid, $courselevel);
 	$ucard->upgradeRunningCourse($moodleid, $courseid);
 	if($debug==1){echo "upgrade done\n";}
     } else if ($courseStatus === FALSE) {
@@ -111,7 +115,7 @@ foreach($courseids as $courseid){
 	if($debug==1){echo "regist $moodleid, $courseid";}
 	$ucard->registCourse($moodleid, $courseid);
 	$courselevel = $ucard->getLevelbyCourse($courseid);
-	$ucard->logRunningCourse($moodleid, $location, $courseid, $courselevel);
+	$ucard->logRunningCourse($moodleid, $rfid_keyout, $location, $courseid, $courselevel);
     }
     if($debug==1){echo "<br>\n";}
 
