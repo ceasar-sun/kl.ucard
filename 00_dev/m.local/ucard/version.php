@@ -10,7 +10,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 20160719;
+$plugin->version   = 20160722;
 $plugin->requires  = 2016052300;
 $plugin->cron      = 0;
 $plugin->component = 'local_ucard';

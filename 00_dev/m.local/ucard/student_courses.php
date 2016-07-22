@@ -64,7 +64,7 @@ if ($CFG->forcelogin) {
     require_login();
 }
 $context = context_system::instance();
-require_capability('local/ucard:change', $context);
+require_capability('local/ucard:view', $context);
 global $CFG;
 global $DB;
 //$DB->set_debug(true);
