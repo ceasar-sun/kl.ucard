@@ -78,7 +78,13 @@ class auth_plugin_openid extends auth_plugin_base {
 	    // 取得 guid 放入 idnumber 欄位
 	    // 因暫時無法取得 guid 資訊，用 birthday 測試用
             $idnumber = '';
-            if (isset($attributes['birthDate'])) $idnumber = $attributes['birthDate'];
+            if (isset($attributes['guid'])) {
+		$idnumber = $attributes['guid'];
+	    }
+	    else {
+		$idnumber = 'no-guid';
+	    }
+
             return array(
                 'firstname' => mb_substr($name, 1, NULL, 'UTF-8'),
                 'lastname' => mb_substr($name, 0, 1, 'UTF-8'),
