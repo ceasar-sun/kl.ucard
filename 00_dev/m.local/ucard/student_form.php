@@ -22,7 +22,7 @@ class student_form extends moodleform {
 	$mform->addElement('header', null, 'moodleid');
 	$mform->addElement('text', 'moodleid');
 	$mform->setType('moodleid', PARAM_TEXT);
-	$mform->setDefault('moodleid', '9');
+//	$mform->setDefault('moodleid', '9');
 	$mform->addRule('moodleid', get_string('error'), 'required', null, 'client');
 
 	$listlocations = listlocation();

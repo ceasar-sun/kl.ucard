@@ -72,7 +72,10 @@ foreach ($courses as $course){
     if ($categoryid == 0){
 	continue;
     }
+
     $name = $course->fullname." - ".$course->shortname;
+    $name_url = new moodle_url('/course/view.php', array('id'=>$course->id));
+    $name_html = "<a href=\"$name_url\">$name</a>";
     $levelrecord = "";
     $level = -1;
     foreach ($course_level_rs as $record) {
@@ -94,7 +97,7 @@ foreach ($courses as $course){
     $resu = get_courseid_by_level_location(10, 1);
     $editlevelurl = new moodle_url('/local/ucard/edit.php', array('category'=>$categoryid));
     $editlink = "<a href=\"$editlevelurl\" \"title=change\">".get_string('change', 'local_ucard')."</a>";
-    $table_html->add_data(array($category, $name, $level, $editlink));
+    $table_html->add_data(array($category, $name_html, $level, $editlink));
 }
 $table_html->print_html();
 // delete removed course level
