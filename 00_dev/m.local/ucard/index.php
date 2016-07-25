@@ -63,6 +63,8 @@ $table_html->define_headers(array(
 */
 $table_html->sortable(true);
 $table_html->setup();
+$last_color="#f9f9f9";
+$last_category="";
 foreach ($courses as $course){
     $category = recursivecategorynamebyid($course->category);
     $location = getlocation($course->category);
@@ -94,7 +96,15 @@ foreach ($courses as $course){
 	$level = 0;
     }
 
-    $resu = get_courseid_by_level_location(10, 1);
+    if($last_category != $course->category){
+	if ($last_color == 'white'){
+	    $last_color = '#f9f9f9';
+	}else if($last_color == '#f9f9f9'){
+	    $last_color = 'white';
+	}
+	$last_category = $course->category;
+    }
+    $table_html->column_style_all('background-color', $last_color);
     $editlevelurl = new moodle_url('/local/ucard/edit.php', array('category'=>$categoryid));
     $editlink = "<a href=\"$editlevelurl\" \"title=change\">".get_string('change', 'local_ucard')."</a>";
     $table_html->add_data(array($category, $name_html, $level, $editlink));

@@ -84,7 +84,8 @@ echo $OUTPUT->header();
 echo $OUTPUT->skip_link_target();
 $moodleid = optional_param('moodleid', 0, PARAM_INT);
 $s_form = new student_form(null);
-
+$user = $DB->get_record('user', array('id'=>$moodleid));
+echo $OUTPUT->box("User Name:".fullname($user));
 if ($s_form->is_cancelled()) {
     $courselevelurl = new moodle_url('/local/ucard/student_courses.php');
     redirect($courselevelurl);
