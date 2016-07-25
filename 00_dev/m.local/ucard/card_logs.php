@@ -21,7 +21,9 @@ if ($CFG->forcelogin) {
 }
 $context = context_system::instance();
 require_capability('local/ucard:viewlog', $context);
-echo $USER->id;
+if(has_capability('local/ucard:view', $context)){
+    $isUcardTeacher = 1;
+}
 
 global $CFG;
 global $UCARD_CFG;
@@ -57,7 +59,11 @@ $querylimit = 20;
 
 $ucard = new UCard($db, $username, $password);
 $ucard->init_moodle($token, $server, $dir);
-$cardlogs = $ucard->listCardLogs($querylimit);
+if(has_capability('local/ucard:view', $context)){
+    $cardlogs = $ucard->listCardLogs($querylimit);
+}else{
+    $cardlogs = $ucard->listUserCardLogs($USER->id, $querylimit);
+}
 $logcount = count($cardlogs);
 
 echo $OUTPUT->box("<p>最新 $querylimit 筆場館打卡資訊</p>\n");
@@ -71,8 +77,8 @@ $table->setup();
 for($i=0;$i<count($cardlogs);$i++){
     $sid = $ucard->getStudentID($cardlogs[$i]['rfid_key16']); // for moodle idnumber
     $rfid_keyout = $ucard->getRFIDKeyOut($cardlogs[$i]['rfid_key16']);
-    $moodleuser = $ucard->getMoodleUserbyStudentID($sid);
-    $userlink = new moodle_url('/local/ucard/student_courses.php', array('moodleid'=>$moodleuser['id']));
+    //$moodleuser = $ucard->getMoodleUserbyStudentID($sid);
+    $userlink = new moodle_url('/local/ucard/student_courses.php', array('moodleid'=>$cardlogs[$i]['moodleid']));
     $user_course_link = "<a href=\"$userlink\">$rfid_keyout</a>";
 
 

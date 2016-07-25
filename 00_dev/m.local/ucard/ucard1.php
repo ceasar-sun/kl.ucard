@@ -26,7 +26,6 @@ if ($cardid === "" || $location === ""){
 }
 
 $ucard->init_moodle($token, $server, $dir);
-$ucard->logCardID($cardid, $location);
 if ($debug == 1){
     $cardlogs = $ucard->listCardLogs();
 }
@@ -47,6 +46,7 @@ if($status === 0 ){
 }
 $moodleuser = $ucard->getMoodleUserbyStudentID($sid);
 $moodleid = $moodleuser['id'];
+$ucard->logCardID($moodleid, $cardid, $location);
 $courseids = array();
 $userrunningcourses = $ucard->getRunningCourse($moodleid, $location, true);
 if (count($userrunningcourses) == 0){

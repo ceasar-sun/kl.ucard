@@ -233,10 +233,16 @@ class UCard {
 	}
     }
 
-    public function logCardID($rfid_key16, $location){
+    public function logCardID($moodleid, $rfid_key16, $location){
 
-	$query = "INSERT INTO cardlog (`id`, `rfid_key16`, `location`, `dtime`) VALUES (NULL, \"$rfid_key16\", $location, CURRENT_TIMESTAMP)";
+	$query = "INSERT INTO cardlog (`id`, `moodleid`, `rfid_key16`, `location`, `dtime`) VALUES (NULL, $moodleid, \"$rfid_key16\", $location, CURRENT_TIMESTAMP)";
 	$data = $this->executeSQL($query);
+    }
+
+    public function listUserCardLogs($moodleid, $limit = 10){
+	$query = "select * from cardlog where `moodleid`=$moodleid ORDER BY dtime DESC limit $limit";
+	$data = $this->executeSQL($query);
+	return $data;
     }
 
     public function listCardLogs($limit = 10){
