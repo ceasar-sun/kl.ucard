@@ -20,7 +20,9 @@ if ($CFG->forcelogin) {
     require_login();
 }
 $context = context_system::instance();
-require_capability('local/ucard:view', $context);
+require_capability('local/ucard:viewlog', $context);
+echo $USER->id;
+
 global $CFG;
 global $UCARD_CFG;
 global $DB;
@@ -40,6 +42,13 @@ echo $OUTPUT->header();
 echo $OUTPUT->skip_link_target();
 
 ## your content /HTML here
+
+//echo $USER->id;
+//$cid=3;
+//$cContext =context_course::instance($cid);
+//$isStudent = current(get_user_roles($cContext, $USER->id))->shortname=='student'? true : false; // instead of shortname you can also use roleid
+//var_dump($isStudent);
+
 
 $db = $UCARD_CFG->dbname;
 $username = $UCARD_CFG->dbuser;
