@@ -48,14 +48,16 @@ $moodleuser = $ucard->getMoodleUserbyStudentID($sid);
 $moodleid = $moodleuser['id'];
 $ucard->logCardID($moodleid, $cardid, $location);
 $courseids = array();
+$usercourses = $ucard->getRunningCourse($moodleid, $location, false);
 $userrunningcourses = $ucard->getRunningCourse($moodleid, $location, true);
-if (count($userrunningcourses) == 0){
+if ((count($userrunningcourses) == 0) && (count($usercourses) == 0)){
     $levelcourseids = $ucard->getCoursesbyLevelLocation($level, $location);
     $courseids_a = array_merge($levelcourseids, $userrunningcourses);
     $courseids = array_unique($courseids_a);
 }else{
     $courseids = array_unique($userrunningcourses);
 }
+
 if ($debug == 1){
     ?>
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -105,8 +107,20 @@ foreach($courseids as $courseid){
     if ($courseStatus === TRUE){
 	if($debug==1){echo "completion: TRUE\n";}
 	$newcourseid = $ucard->upgradeCourse($moodleid, $courseid, $location);
-	$courselevel = $ucard->getLevelbyCourse($newcourseid);
-	$ucard->logRunningCourse($moodleid, $rfid_keyout, $location, $newcourseid, $courselevel);
+	if(empty($newcourseid)){
+	    // release all course for this track
+	    $track = $ucard->getTrackbyCourse($courseid);
+	    $lastcourses = $ucard->getLastCourse($level, $track);
+	    foreach ($lastcourses as $cid){
+		$lastcourseid = $cid['id'];
+		$lastcourselevel = $ucard->getLevelbyCourse($lastcourseid);
+		$ucard->registCourse($moodleid, $lastcourseid);
+		$ucard->logRunningCourse($moodleid, $rfid_keyout, $location, $lastcourseid, $lastcourselevel);
+	    }
+	}else{
+	    $courselevel = $ucard->getLevelbyCourse($newcourseid);
+	    $ucard->logRunningCourse($moodleid, $rfid_keyout, $location, $newcourseid, $courselevel);
+	}
 	$ucard->upgradeRunningCourse($moodleid, $courseid);
 	if($debug==1){echo "upgrade done\n";}
     } else if ($courseStatus === FALSE) {
@@ -128,7 +142,7 @@ foreach($courseids as $courseid){
 if($debug==1){echo "<p>JSON:</p>";}
 if($debug==1){echo "<pre>";}
 if ($status === 1){
-    echo "{\"status\":\"$status\",\"result\":{\"sid\":\"$sid\",\"rfid_key16\":\"XXX\",\"name\":\"$moodleuser[fullname]\"}}";
+    echo "{\"status\":\"$status\",\"result\":{\"sid\":\"$sid\",\"rfid_keyout\":\"$rfid_keyout\",\"name\":\"$moodleuser[fullname]\"}}";
 } else {
     echo "{\"status\":\"$status\"}";
 }

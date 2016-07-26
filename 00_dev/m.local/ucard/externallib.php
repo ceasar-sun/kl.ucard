@@ -54,6 +54,53 @@ class local_courselevel_external extends external_api {
      * Returns description of method parameters
      * @return external_getlevel_parameters
      */
+    public static function getlastcourse_parameters() {
+	return new external_function_parameters(
+		array(
+		    'level' => new external_value(PARAM_INT, 'level of user'),
+		    'track' => new external_value(PARAM_INT, 'track of course')			)
+	);
+    }
+
+
+    /**
+     * The function itself
+     * @return string welcome message
+     */
+    public static function getlastcourse($level, $track) {
+
+	//Parameters validation
+	$params = self::validate_parameters(self::getlastcourse_parameters(),
+		array('level' => $level, 'track' => $track));
+
+	global $CFG;
+	global $DB;
+	require_once($CFG->dirroot . "/local/ucard/lib.php");
+	
+	$courseids = get_last_courses($params['level'], $params['track']);
+
+	return $courseids;
+    }
+
+    /**
+     * Returns description of method result value
+     * @return external_description
+     */
+    public static function getlastcourse_returns() {
+    	return new external_multiple_structure(
+		new external_single_structure(
+		    array(
+			'id' => new external_value(PARAM_INT, 'Course ID'),
+			)
+		    )
+		);
+    }
+
+
+    /**
+     * Returns description of method parameters
+     * @return external_getlevel_parameters
+     */
     public static function getnextcourse_parameters() {
 	return new external_function_parameters(
 		array('courseid' => new external_value(PARAM_INT, 'id of course'))
