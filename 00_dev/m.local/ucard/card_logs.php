@@ -20,7 +20,11 @@ if ($CFG->forcelogin) {
     require_login();
 }
 $context = context_system::instance();
-require_capability('local/ucard:view', $context);
+require_capability('local/ucard:viewlog', $context);
+if(has_capability('local/ucard:view', $context)){
+    $isUcardTeacher = 1;
+}
+
 global $CFG;
 global $UCARD_CFG;
 global $DB;
@@ -41,6 +45,13 @@ echo $OUTPUT->skip_link_target();
 
 ## your content /HTML here
 
+//echo $USER->id;
+//$cid=3;
+//$cContext =context_course::instance($cid);
+//$isStudent = current(get_user_roles($cContext, $USER->id))->shortname=='student'? true : false; // instead of shortname you can also use roleid
+//var_dump($isStudent);
+
+
 $db = $UCARD_CFG->dbname;
 $username = $UCARD_CFG->dbuser;
 $password = $UCARD_CFG->dbpass;
@@ -48,7 +59,11 @@ $querylimit = 20;
 
 $ucard = new UCard($db, $username, $password);
 $ucard->init_moodle($token, $server, $dir);
-$cardlogs = $ucard->listCardLogs($querylimit);
+if(has_capability('local/ucard:view', $context)){
+    $cardlogs = $ucard->listCardLogs($querylimit);
+}else{
+    $cardlogs = $ucard->listUserCardLogs($USER->id, $querylimit);
+}
 $logcount = count($cardlogs);
 
 echo $OUTPUT->box("<p>最新 $querylimit 筆場館打卡資訊</p>\n");
@@ -62,8 +77,8 @@ $table->setup();
 for($i=0;$i<count($cardlogs);$i++){
     $sid = $ucard->getStudentID($cardlogs[$i]['rfid_key16']); // for moodle idnumber
     $rfid_keyout = $ucard->getRFIDKeyOut($cardlogs[$i]['rfid_key16']);
-    $moodleuser = $ucard->getMoodleUserbyStudentID($sid);
-    $userlink = new moodle_url('/local/ucard/student_courses.php', array('moodleid'=>$moodleuser['id']));
+    //$moodleuser = $ucard->getMoodleUserbyStudentID($sid);
+    $userlink = new moodle_url('/local/ucard/student_courses.php', array('moodleid'=>$cardlogs[$i]['moodleid']));
     $user_course_link = "<a href=\"$userlink\">$rfid_keyout</a>";
 
 

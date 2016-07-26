@@ -67,7 +67,7 @@ if ($CFG->forcelogin) {
     require_login();
 }
 $context = context_system::instance();
-require_capability('local/ucard:view', $context);
+require_capability('local/ucard:viewlog', $context);
 global $CFG;
 global $DB;
 //$DB->set_debug(true);
@@ -82,9 +82,14 @@ $navbar = init_ucard_nav($PAGE);
 
 echo $OUTPUT->header(); 
 echo $OUTPUT->skip_link_target();
-$moodleid = optional_param('moodleid', 0, PARAM_INT);
+if(has_capability('local/ucard:view', $context)){
+    $moodleid = optional_param('moodleid', 0, PARAM_INT);
+}else{
+    $moodleid = $USER->id;
+}
 $s_form = new student_form(null);
-
+$user = $DB->get_record('user', array('id'=>$moodleid));
+echo $OUTPUT->box("User Name:".fullname($user));
 if ($s_form->is_cancelled()) {
     $courselevelurl = new moodle_url('/local/ucard/student_courses.php');
     redirect($courselevelurl);

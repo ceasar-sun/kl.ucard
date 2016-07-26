@@ -26,7 +26,6 @@ if ($cardid === "" || $location === ""){
 }
 
 $ucard->init_moodle($token, $server, $dir);
-$ucard->logCardID($cardid, $location);
 if ($debug == 1){
     $cardlogs = $ucard->listCardLogs();
 }
@@ -47,12 +46,16 @@ if($status === 0 ){
 }
 $moodleuser = $ucard->getMoodleUserbyStudentID($sid);
 $moodleid = $moodleuser['id'];
-$levelcourseids = $ucard->getCoursesbyLevelLocation($level, $location);
-//$usercourses = $ucard->getUserCourses($moodleid);
-//$courseids_a = array_merge($levelcourseids, $usercourses);
+$ucard->logCardID($moodleid, $cardid, $location);
+$courseids = array();
 $userrunningcourses = $ucard->getRunningCourse($moodleid, $location, true);
-$courseids_a = array_merge($levelcourseids, $userrunningcourses);
-$courseids = array_unique($courseids_a);
+if (count($userrunningcourses) == 0){
+    $levelcourseids = $ucard->getCoursesbyLevelLocation($level, $location);
+    $courseids_a = array_merge($levelcourseids, $userrunningcourses);
+    $courseids = array_unique($courseids_a);
+}else{
+    $courseids = array_unique($userrunningcourses);
+}
 if ($debug == 1){
     ?>
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
