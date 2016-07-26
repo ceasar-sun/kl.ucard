@@ -16,6 +16,13 @@ $functions = array(
 	    'description' => 'Get the level for a course',
 	    'type' => 'read'
 	    ),
+	'course_level_get_last_course' => array(
+	    'classname' => 'local_courselevel_external',
+	    'methodname' => 'getlastcourse',
+	    'classpath' => 'local/ucard/externallib.php',
+	    'description' => 'Get the last courses',
+	    'type' => 'read'
+	    ),
 	'course_level_get_next_course' => array(
 	    'classname' => 'local_courselevel_external',
 	    'methodname' => 'getnextcourse',
