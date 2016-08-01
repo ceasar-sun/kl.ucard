@@ -71,7 +71,11 @@ echo $OUTPUT->box("<p>最新 $querylimit 筆場館打卡資訊</p>\n");
 $table = new flexible_table('Card Logs');
 $table->define_baseurl(new moodle_url("/local/ucard/card_logs.php"));
 $table->define_columns(array("id", "rfid_keyout", "location", "timestamp"));
-$table->define_headers(array("id", "name(rfid)", "location", "timestamp"));
+$table->define_headers(array
+		    (get_string("id", 'local_ucard'),
+		    get_string("name-rfid", 'local_ucard'),
+		    get_string("location", 'local_ucard'),
+		    get_string("timestamp", 'local_ucard')));
 $table->sortable(true);
 $table->setup();
 for($i=0;$i<count($cardlogs);$i++){
@@ -87,7 +91,5 @@ for($i=0;$i<count($cardlogs);$i++){
 $table->print_html();
 
 echo $OUTPUT->box("<p>全部$logcount 筆場館打卡資訊</p>\n");
-$x=get_next_level_courseid(9);
-var_dump($x);
 ## end of your content /HTML
 echo $OUTPUT->footer();
