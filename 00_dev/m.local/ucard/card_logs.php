@@ -91,7 +91,5 @@ for($i=0;$i<count($cardlogs);$i++){
 $table->print_html();
 
 echo $OUTPUT->box("<p>全部$logcount 筆場館打卡資訊</p>\n");
-$x=get_next_level_courseid(9);
-var_dump($x);
 ## end of your content /HTML
 echo $OUTPUT->footer();
