@@ -35,7 +35,12 @@ function list_student_courses($moodleid){
     $table = new flexible_table('Student Courses');
     $table->define_baseurl(new moodle_url("/local/ucard/student_courses.php"));
     $table->define_columns(array("location", "coursename", "level", "status"));
-    $table->define_headers(array("Loction", "Course Name", "Level", "Status"));
+    $table->define_headers(array(
+			    get_string("location", "local_ucard"),
+			    get_string("course", "local_ucard").get_string("name", "local_ucard"),
+			    get_string("level", "local_ucard"),
+			    get_string("status", "local_ucard"))
+			    );
     $table->sortable(true);
     $table->setup();
     foreach($usercourses as $courseid){
@@ -89,7 +94,7 @@ if(has_capability('local/ucard:view', $context)){
 }
 $s_form = new student_form(null);
 $user = $DB->get_record('user', array('id'=>$moodleid));
-echo $OUTPUT->box("User Name:".fullname($user));
+echo $OUTPUT->box(get_string('username', 'local_ucard').":".fullname($user));
 if ($s_form->is_cancelled()) {
     $courselevelurl = new moodle_url('/local/ucard/student_courses.php');
     redirect($courselevelurl);
