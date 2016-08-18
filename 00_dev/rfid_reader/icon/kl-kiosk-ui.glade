@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.0 -->
+<interface>
+  <requires lib="gtk+" version="3.20"/>
+  <object class="GtkWindow" id="Xwin">
+    <property name="can_focus">False</property>
+    <property name="margin_left">2</property>
+    <property name="margin_right">2</property>
+    <property name="margin_top">2</property>
+    <property name="margin_bottom">2</property>
+    <property name="border_width">1</property>
+    <property name="decorated">False</property>
+    <property name="startup_id">Xwin</property>
+    <child>
+      <object class="GtkEventBox" id="bg">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkGrid">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkLabel" id="title">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">
+樂      學      網
+</property>
+                <attributes>
+                  <attribute name="font-desc" value="Sans Bold 16"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+                <property name="width">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="Lname">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="ypad">10</property>
+                <property name="label" translatable="yes">姓名</property>
+                <property name="width_chars">10</property>
+                <property name="max_width_chars">10</property>
+                <property name="xalign">0.10000000149011612</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="Lsid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="ypad">10</property>
+                <property name="label" translatable="yes">學號</property>
+                <property name="width_chars">4</property>
+                <property name="max_width_chars">4</property>
+                <property name="xalign">0.05000000074505806</property>
+              </object>
+              <packing>
+                <property name="left_attach">3</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="sid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">123456789</property>
+                <property name="width_chars">10</property>
+                <property name="max_width_chars">10</property>
+              </object>
+              <packing>
+                <property name="left_attach">4</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="Lcid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="ypad">10</property>
+                <property name="label" translatable="yes">卡號</property>
+                <property name="width_chars">4</property>
+                <property name="max_width_chars">4</property>
+                <property name="xalign">0.05000000074505806</property>
+              </object>
+              <packing>
+                <property name="left_attach">3</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="cid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">EFRD2233</property>
+                <property name="width_chars">10</property>
+                <property name="max_width_chars">10</property>
+              </object>
+              <packing>
+                <property name="left_attach">4</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="Lcontact">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="ypad">10</property>
+                <property name="label" translatable="yes">聯絡資訊
+03 5776085</property>
+                <property name="width_chars">20</property>
+                <property name="max_width_chars">20</property>
+                <property name="xalign">0.5</property>
+              </object>
+              <packing>
+                <property name="left_attach">3</property>
+                <property name="top_attach">5</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="Linfo">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="ypad">10</property>
+                <property name="label" translatable="yes">課程資訊</property>
+                <property name="width_chars">10</property>
+                <property name="max_width_chars">10</property>
+                <property name="xalign">0.5</property>
+                <attributes>
+                  <attribute name="font-desc" value="Sans 18"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">2</property>
+                <property name="width">2</property>
+                <property name="height">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="info">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="ypad">40</property>
+                <property name="label" translatable="yes">新課程:
+AAAAAAAAA
+繼續課程：
+BBBBBBBBB
+CCCCCCCCC
+DDDDDDDD
+完成課程：
+EEEEEEEEEE
+FFFFFFFFFFF</property>
+                <property name="width_chars">45</property>
+                <property name="max_width_chars">45</property>
+                <property name="xalign">0.070000000298023224</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">4</property>
+                <property name="width">2</property>
+                <property name="height">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="contact">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="ypad">10</property>
+                <property name="label" translatable="yes">基隆市政府教育局
+國家高速網路與計算中心
+合作提供</property>
+                <property name="width_chars">20</property>
+                <property name="max_width_chars">20</property>
+                <property name="xalign">0.5</property>
+              </object>
+              <packing>
+                <property name="left_attach">3</property>
+                <property name="top_attach">6</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="name">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="ypad">10</property>
+                <property name="label" translatable="yes">蔡育欽</property>
+                <property name="width_chars">35</property>
+                <property name="max_width_chars">5</property>
+                <property name="xalign">0.039999999105930328</property>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="Ltime">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="ypad">10</property>
+                <property name="label" translatable="yes">時間</property>
+                <property name="width_chars">4</property>
+                <property name="max_width_chars">4</property>
+                <property name="xalign">0.05000000074505806</property>
+              </object>
+              <packing>
+                <property name="left_attach">3</property>
+                <property name="top_attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="time">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">2016/08/17 11:22</property>
+                <property name="width_chars">10</property>
+                <property name="max_width_chars">10</property>
+              </object>
+              <packing>
+                <property name="left_attach">4</property>
+                <property name="top_attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
