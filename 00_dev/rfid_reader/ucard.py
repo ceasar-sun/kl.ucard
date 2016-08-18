@@ -15,7 +15,7 @@ debug=1
 Udata={}
 Ustatus={'device':'no', 'card':'no', 'id':'no'}
 Ulbs={}
-Uconf={'locationid':10, 'location_name':" 文 化 中 心"}
+Uconf={'locationid':10, 'location_name':"文化中心"}
 
 class readucarddata(threading.Thread):
 
