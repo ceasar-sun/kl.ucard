@@ -8,6 +8,7 @@ import threading
 import ucardreader
 import requests
 import json
+import random
 
 # debug
 debug=1
