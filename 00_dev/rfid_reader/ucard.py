@@ -8,9 +8,11 @@ import threading
 import ucardreader
 import requests
 import json
+import random
 
 Udata={}
 Ustatus={'card':'no', 'id':'no'}
+Ulbs={}
 
 class readucarddata(threading.Thread):
 
@@ -38,20 +40,24 @@ class readucarddata(threading.Thread):
                 continue
 
 
-class UpdateData(threading.Thread):
+#class UpdateData(threading.Thread):
+class UpdateData():
     def __init__(self, lbs):
-	threading.Thread.__init__(self)
-	self.lbs = lbs
+	#threading.Thread.__init__(self)
+	self.lbs = Ulbs
 	self.rfid_key16 = ""
 	self.locationid="10"
+	self.run()
 
     def run(self):
-	while True:
-	    print Udata
-	    print Ustatus
-	    if self.access_moodle() == True:
-		self.update_labels()
-	    time.sleep(2)
+	#while True:
+	#    print Udata
+	#    print Ustatus
+	#    if self.access_moodle() == True:
+	#	self.update_labels()
+	#    time.sleep(2)
+	if self.access_moodle() == True:
+	    self.update_labels()
 
     def clear_labels(self):
 	self.lbs['time'].set_text(time.strftime('%H:%M:%S'))
@@ -114,12 +120,14 @@ lsid = builder.get_object("sid")
 lcid = builder.get_object("cid")
 ltime = builder.get_object("time")
 lbs = {'name':lname, 'info':linfo, 'sid':lsid, 'cid':lcid, 'time':ltime}
+Ulbs=lbs
 window.connect("delete-event", Gtk.main_quit)
+GObject.timeout_add_seconds(2, UpdateData, lbs)
 window.show_all()
 
-thrUpdate = UpdateData(lbs)
-thrUpdate.daemon = True
-thrUpdate.start()
+#thrUpdate = UpdateData(lbs)
+#thrUpdate.daemon = True
+#thrUpdate.start()
 
 thrReader = readucarddata()
 thrReader.daemon = True
