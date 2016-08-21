@@ -8,11 +8,14 @@ import threading
 import ucardreader
 import requests
 import json
-import random
+
+# debug
+debug=1
 
 Udata={}
-Ustatus={'card':'no', 'id':'no'}
+Ustatus={'device':'no', 'card':'no', 'id':'no'}
 Ulbs={}
+Uconf={'locationid':10, 'location_name':" 文 化 中 心"}
 
 class readucarddata(threading.Thread):
 
@@ -24,18 +27,20 @@ class readucarddata(threading.Thread):
 	global Ustatus
 	global Udata
         while True:
-	    time.sleep(3)
+	    time.sleep(2)
             try:
-                rfid=ucardreader.Ureader()
-                rfid.connect()
+                if Ustatus['device'] == 'no':
+                    rfid=ucardreader.Ureader()
+                    rfid.connect()
+                    Ustatus['device'] == 'yes'
                 self.rfid_key16 = rfid.read()
 		if self.rfid_key16 == False:
-		    Ustatus={'card':'no', 'id':'no'}
+                    Ustatus={'device':'no', 'card':'no', 'id':'no'}
 		else:
-		    Ustatus={'card':'yes', 'id':self.rfid_key16}
+                    Ustatus={'device':'yes', 'card':'yes', 'id':self.rfid_key16}
             except:
                 time.sleep(2)
-		Ustatus={'card':'no', 'id':'no'}
+                Ustatus={'device':'no', 'card':'no', 'id':'no'}
 		Udata={}
                 continue
 
@@ -46,7 +51,7 @@ class UpdateData():
 	#threading.Thread.__init__(self)
 	self.lbs = Ulbs
 	self.rfid_key16 = ""
-	self.locationid="10"
+	self.locationid=Uconf['locationid']
 	self.run()
 
     def run(self):
@@ -61,10 +66,10 @@ class UpdateData():
 
     def clear_labels(self):
 	self.lbs['time'].set_text(time.strftime('%H:%M:%S'))
-	self.lbs['name'].set_text("")
-	self.lbs['info'].set_text("請放置卡片以查詢狀態")
-	self.lbs['sid'].set_text("")
-	self.lbs['cid'].set_text("")
+	#self.lbs['name'].set_text("")
+	self.lbs['info'].set_text("\n請放置卡片以查詢課程進度")
+	#self.lbs['sid'].set_text("")
+	#self.lbs['cid'].set_text("")
 
     def update_labels(self):
 	self.lbs['name'].set_text(Udata['name'])
@@ -78,13 +83,13 @@ class UpdateData():
 	global Udata
 	global Ustatus
 	if Ustatus['card'] == "no":
-	    print "no card"
+	    if debug: print "no card"
 	    Udata={}
 	    self.rfid_key16 = ""
 	    self.clear_labels()
 	    return False
 	elif Ustatus['id'] == self.rfid_key16:
-	    print "same id %s = %s, keep data\n" % (Ustatus['id'], self.rfid_key16)
+	    if debug: print "same id %s = %s, keep data\n" % (Ustatus['id'], self.rfid_key16)
 	    return False
 	else:
             try:
@@ -101,11 +106,11 @@ class UpdateData():
                 else:
 		    return False
             except:
-		print "access data error: url = %s" % url
+		if debug: print "access data error: url = %s" % url
                 time.sleep(2)
 
         ctime = time.strftime('%Y/%m/%d %H:%M:%S')
-        location = "文化中心"
+        location = Uconf['location_name']
         udata={'name':name, 'course':course, 'sid':sid, 'location':location, 'rfid_keyout':rfid_keyout, 'time':ctime}
 	Udata = udata
 	return True
