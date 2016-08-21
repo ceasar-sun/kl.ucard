@@ -6,6 +6,8 @@ import datetime
 import requests
 from smartcard.System import readers
 from smartcard.util import toHexString
+readerid=2
+readerid=0
 
 # debug
 debug=0
@@ -20,7 +22,7 @@ class Ureader():
 	#['Alcor Micro AU9522 00 00', 'Alcor Micro AU9522 00 01', 'NXP PR533 (3.70) 01 00']
 	r = readers()
 	if debug: print r
-	self.connection = r[2].createConnection()
+	self.connection = r[readerid].createConnection()
     def read(self):
 	# keyword to ask card id
 	SELECT = [0xFF, 0xCA, 0x00, 0x00, 0x00]
