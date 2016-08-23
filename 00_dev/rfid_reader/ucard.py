@@ -39,7 +39,6 @@ class readucarddata(threading.Thread):
 		else:
                     Ustatus={'device':'yes', 'card':'yes', 'id':self.rfid_key16}
             except:
-                time.sleep(2)
                 Ustatus={'device':'no', 'card':'no', 'id':'no'}
 		Udata={}
                 continue
@@ -64,12 +63,19 @@ class UpdateData():
 	if self.access_moodle() == True:
 	    self.update_labels()
 
+    def error_labels(self, mesg):
+	self.lbs['time'].set_text(time.strftime('%H:%M:%S'))
+	self.lbs['name'].set_text("")
+	self.lbs['info'].set_text("\n卡片資訊讀取錯誤\n(錯誤代碼：%s)，請重試。\n或是連繫管理員" % mesg)
+	self.lbs['sid'].set_text("")
+	self.lbs['cid'].set_text("")
+
     def clear_labels(self):
 	self.lbs['time'].set_text(time.strftime('%H:%M:%S'))
-	#self.lbs['name'].set_text("")
+	self.lbs['name'].set_text("")
 	self.lbs['info'].set_text("\n請放置卡片以查詢課程進度")
-	#self.lbs['sid'].set_text("")
-	#self.lbs['cid'].set_text("")
+	self.lbs['sid'].set_text("")
+	self.lbs['cid'].set_text("")
 
     def update_labels(self):
 	self.lbs['name'].set_text(Udata['name'])
@@ -77,6 +83,7 @@ class UpdateData():
 	self.lbs['sid'].set_text(Udata['sid'][:8])
 	self.lbs['cid'].set_text(Udata['rfid_keyout'])
 	self.lbs['time'].set_text(Udata['time'])
+	self.lbs['info'].set_text(Udata['course'])
 
     def access_moodle(self):
 
@@ -98,20 +105,30 @@ class UpdateData():
                 moodle_data_st = json.loads(r.text)
                 if moodle_data_st['status'] == '1':
                     moodle_data = moodle_data_st['result']
+                    moodle_course = moodle_data_st['courses']
                     sid = moodle_data['sid']
                     rfid_keyout = moodle_data['rfid_keyout']
                     name = moodle_data['name']
-                    course=""
 		    self.rfid_key16 = Ustatus['id']
                 else:
+	            self.error_labels('moodle 資料錯誤')
 		    return False
             except:
+		self.error_labels('網路異常')
 		if debug: print "access data error: url = %s" % url
-                time.sleep(2)
+                time.sleep(1)
 
         ctime = time.strftime('%Y/%m/%d %H:%M:%S')
         location = Uconf['location_name']
-        udata={'name':name, 'course':course, 'sid':sid, 'location':location, 'rfid_keyout':rfid_keyout, 'time':ctime}
+	course_label_mesg=""
+	for coursename in moodle_course:
+	    if coursename != '':
+		cmesg = u'進行中'
+		if moodle_course[coursename] == 'YES' :
+		    cmesg = u'完成'
+		coursemesg = u"課程 %s, %s\n" % (coursename, cmesg)
+		course_label_mesg = course_label_mesg+coursemesg
+	udata={'name':name, 'sid':sid, 'location':location, 'rfid_keyout':rfid_keyout, 'time':ctime, 'course':course_label_mesg}
 	Udata = udata
 	return True
 
