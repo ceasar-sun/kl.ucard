@@ -437,6 +437,13 @@ class UCard {
 	return $response;
     }
 
+    public function getLastCourse($level, $track){
+	$params = array($level, $track);
+	$api='course_level_get_last_course';
+	$response = $this->executeMoodleAPI($api, $params);
+	return $response;
+    }
+
 
     public function upgradeCourse($moodleid, $courseid, $location){
 

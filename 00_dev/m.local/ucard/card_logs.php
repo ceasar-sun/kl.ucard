@@ -71,18 +71,22 @@ echo $OUTPUT->box("<p>最新 $querylimit 筆場館打卡資訊</p>\n");
 $table = new flexible_table('Card Logs');
 $table->define_baseurl(new moodle_url("/local/ucard/card_logs.php"));
 $table->define_columns(array("id", "rfid_keyout", "location", "timestamp"));
-$table->define_headers(array("id", "rfid", "location", "timestamp"));
+$table->define_headers(array
+		    (get_string("id", 'local_ucard'),
+		    get_string("name-rfid", 'local_ucard'),
+		    get_string("location", 'local_ucard'),
+		    get_string("timestamp", 'local_ucard')));
 $table->sortable(true);
 $table->setup();
 for($i=0;$i<count($cardlogs);$i++){
     $sid = $ucard->getStudentID($cardlogs[$i]['rfid_key16']); // for moodle idnumber
     $rfid_keyout = $ucard->getRFIDKeyOut($cardlogs[$i]['rfid_key16']);
-    //$moodleuser = $ucard->getMoodleUserbyStudentID($sid);
+    $moodleuser = $ucard->getMoodleUserbyStudentID($sid);
     $userlink = new moodle_url('/local/ucard/student_courses.php', array('moodleid'=>$cardlogs[$i]['moodleid']));
-    $user_course_link = "<a href=\"$userlink\">$rfid_keyout</a>";
+    $user_course_link = "<a href=\"$userlink\">".$moodleuser['fullname']." ($rfid_keyout)</a>";
 
 
-    $table->add_data(array($cardlogs[$i]['id'], $user_course_link, $cardlogs[$i]['location'], $cardlogs[$i]['dtime']));
+    $table->add_data(array($cardlogs[$i]['id'], $user_course_link, categorynamebyid($cardlogs[$i]['location']), $cardlogs[$i]['dtime']));
 }
 $table->print_html();
 

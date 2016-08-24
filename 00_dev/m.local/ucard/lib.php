@@ -198,3 +198,16 @@ function get_courseid_by_level_location($location, $level){
 
     return $result;
 }
+
+function get_last_courses($userlevel, $track){
+    global $CFG, $DB;
+    $result= array();
+    $courseintrack=$DB->get_records('course', array('category'=>$track));
+    foreach ($courseintrack as $track){
+	$level = get_level_by_courseid($track->id);
+	if ($level < $userlevel){
+	    $result[] = array('id'=>$track->id);
+	}
+    }
+    return $result;
+}
