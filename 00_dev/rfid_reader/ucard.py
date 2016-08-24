@@ -17,8 +17,8 @@ debug=1
 Udata={}
 Ustatus={'device':'no', 'card':'no', 'id':'no', 'oid':'no'}
 Ulbs={}
-Uconf={'locationid':10, 'location_name':"文化中心"}
-Ucard_url="http://moodle.nchc.org.tw/moodle/local/ucard"
+Uconf={'locationid':1, 'location_name':"海生館"}
+Ucard_url="http://learning.kl.edu.tw/moodle/local/ucard"
 
 class readucarddata(threading.Thread):
 
@@ -66,15 +66,7 @@ class UpdateData():
 	    self.update_labels()
 
     def running_labels(self):
-	print "running"
-        #self.lbs['date'].set_text(time.strftime('%Y/%m/%d'))
-	#self.lbs['time'].set_text(time.strftime('%H:%M:%S'))
-	#self.lbs['name'].set_text("")
 	self.lbs['info'].set_text("\n課程資料讀取中，請稍候\n")
-	#self.lbs['sid'].set_text("")
-	#self.lbs['cid'].set_text("")
-	#path="icon/moodle.qr.png"
-	#self.lbs['qrcode'].set_from_file(path)
 
     def error_labels(self, mesg):
         self.lbs['date'].set_text(time.strftime('%Y/%m/%d'))
@@ -160,7 +152,7 @@ class UpdateData():
 		    cmesg = u'完成'
 		coursemesg = u"課程 %s, %s\n" % (coursename, cmesg)
                 dedented_mesg = textwrap.dedent(coursemesg)
-                wrap_coursemesg = textwrap.fill(dedented_mesg, width=14)
+                wrap_coursemesg = textwrap.fill(dedented_mesg, width=22)
 		course_label_mesg = course_label_mesg+"\n"+wrap_coursemesg
         udata={'name':name, 'moodleid':moodleid, 'sid':sid, 'location':location, 'rfid_keyout':rfid_keyout, 'time':ctime, 'date':cdate, 'course':course_label_mesg}
 	Udata = udata
@@ -176,11 +168,13 @@ lsid = builder.get_object("sid")
 lcid = builder.get_object("cid")
 ldate = builder.get_object("date")
 ltime = builder.get_object("time")
+llocation = builder.get_object("location")
 lqrcode = builder.get_object("Icode")
-lbs = {'name':lname, 'info':linfo, 'sid':lsid, 'cid':lcid, 'date':ldate, 'time':ltime, 'qrcode':lqrcode}
+lbs = {'name':lname, 'info':linfo, 'sid':lsid, 'cid':lcid, 'date':ldate, 'time':ltime, 'qrcode':lqrcode, 'location':llocation}
 Ulbs=lbs
 window.connect("delete-event", Gtk.main_quit)
 GObject.timeout_add_seconds(2, UpdateData, lbs)
+llocation.set_text(Uconf['location_name'])
 window.show_all()
 
 #thrUpdate = UpdateData(lbs)

@@ -83,35 +83,7 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="margin_bottom">10</property>
-                <property name="pixbuf">location.png</property>
-              </object>
-              <packing>
-                <property name="left_attach">2</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="location">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="margin_right">12</property>
-                <property name="label" translatable="yes">文化中心  </property>
-                <property name="width_chars">0</property>
-                <property name="max_width_chars">0</property>
-                <attributes>
-                  <attribute name="font-desc" value="&lt;Enter Value&gt; 22"/>
-                </attributes>
-              </object>
-              <packing>
-                <property name="left_attach">3</property>
-                <property name="top_attach">0</property>
+                <property name="width">3</property>
               </packing>
             </child>
             <child>
@@ -127,7 +99,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="label" translatable="yes">課程進度查尋
+                    <property name="label" translatable="yes">課程進度查尋課程資訊課程資訊課
 
 
 
@@ -158,7 +130,7 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">2</property>
-                <property name="width">2</property>
+                <property name="width">4</property>
               </packing>
             </child>
             <child>
@@ -173,8 +145,7 @@
                   <object class="GtkLabel" id="name">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_right">12</property>
-                    <property name="label" translatable="yes">蔡育欽</property>
+                    <property name="label" translatable="yes">NAME</property>
                     <property name="width_chars">15</property>
                     <property name="max_width_chars">15</property>
                     <property name="xalign">1</property>
@@ -253,8 +224,7 @@
                   <object class="GtkLabel" id="sid">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_right">12</property>
-                    <property name="label" translatable="yes">123456789</property>
+                    <property name="label" translatable="yes">ID</property>
                     <property name="width_chars">15</property>
                     <property name="max_width_chars">15</property>
                     <property name="xalign">1</property>
@@ -271,8 +241,7 @@
                   <object class="GtkLabel" id="cid">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_right">12</property>
-                    <property name="label" translatable="yes">EFRD2233</property>
+                    <property name="label" translatable="yes">CardID</property>
                     <property name="width_chars">15</property>
                     <property name="max_width_chars">15</property>
                     <property name="xalign">1</property>
@@ -289,7 +258,6 @@
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_right">12</property>
                     <property name="label" translatable="yes">+886 3 5776085</property>
                     <property name="width_chars">15</property>
                     <property name="max_width_chars">15</property>
@@ -351,9 +319,9 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">2</property>
+                <property name="left_attach">4</property>
                 <property name="top_attach">2</property>
-                <property name="width">2</property>
+                <property name="width">3</property>
               </packing>
             </child>
             <child>
@@ -365,7 +333,7 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">1</property>
-                <property name="width">4</property>
+                <property name="width">7</property>
               </packing>
             </child>
             <child>
@@ -407,7 +375,7 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">3</property>
-                <property name="width">2</property>
+                <property name="width">4</property>
               </packing>
             </child>
             <child>
@@ -422,9 +390,39 @@
                 <property name="pixbuf">footer.bar.png</property>
               </object>
               <packing>
-                <property name="left_attach">2</property>
+                <property name="left_attach">4</property>
                 <property name="top_attach">3</property>
+                <property name="width">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="location">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_right">12</property>
+                <property name="label" translatable="yes">文化中心  </property>
+                <property name="width_chars">0</property>
+                <property name="max_width_chars">0</property>
+                <attributes>
+                  <attribute name="font-desc" value="&lt;Enter Value&gt; 22"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="left_attach">5</property>
+                <property name="top_attach">0</property>
                 <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_bottom">10</property>
+                <property name="pixbuf">location.png</property>
+              </object>
+              <packing>
+                <property name="left_attach">4</property>
+                <property name="top_attach">0</property>
               </packing>
             </child>
           </object>
