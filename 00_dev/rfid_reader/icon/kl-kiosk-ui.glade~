@@ -31,10 +31,8 @@
           <object class="GtkImage" id="right-img">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">start</property>
+            <property name="halign">end</property>
             <property name="valign">start</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
             <property name="pixbuf">ucard-main-right.png</property>
           </object>
           <packing>
@@ -46,10 +44,8 @@
           <object class="GtkImage" id="left-img">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">end</property>
+            <property name="halign">start</property>
             <property name="valign">start</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
             <property name="pixbuf">ucard-main-left.png</property>
           </object>
           <packing>
@@ -59,7 +55,6 @@
         </child>
         <child>
           <object class="GtkGrid" id="MAIN">
-            <property name="width_request">-1</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
