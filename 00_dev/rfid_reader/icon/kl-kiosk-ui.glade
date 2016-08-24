@@ -3,8 +3,12 @@
 <interface>
   <requires lib="gtk+" version="3.2"/>
   <object class="GtkWindow" id="Xwin">
+    <property name="width_request">820</property>
+    <property name="height_request">760</property>
     <property name="can_focus">False</property>
-    <property name="border_width">1</property>
+    <property name="margin_left">230</property>
+    <property name="margin_right">230</property>
+    <property name="border_width">3</property>
     <property name="decorated">False</property>
     <property name="startup_id">Xwin</property>
     <child>
@@ -12,343 +16,434 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkImage">
+          <object class="GtkImage" id="header-img">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="pixbuf">ucard-main-header.png</property>
           </object>
           <packing>
-            <property name="left_attach">1</property>
+            <property name="left_attach">0</property>
             <property name="top_attach">0</property>
-            <property name="width">6</property>
+            <property name="width">3</property>
           </packing>
         </child>
         <child>
-          <object class="GtkImage">
+          <object class="GtkImage" id="right-img">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">end</property>
+            <property name="valign">start</property>
+            <property name="pixbuf">ucard-main-right.png</property>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="top_attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="left-img">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="valign">start</property>
+            <property name="pixbuf">ucard-main-left.png</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid" id="MAIN">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_bottom">10</property>
+                <property name="pixbuf">note.png</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">課程資訊</property>
+                <property name="width_chars">0</property>
+                <property name="max_width_chars">0</property>
+                <attributes>
+                  <attribute name="font-desc" value="&lt;Enter Value&gt; 22"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_bottom">10</property>
+                <property name="pixbuf">location.png</property>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="location">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_right">12</property>
+                <property name="label" translatable="yes">文化中心  </property>
+                <property name="width_chars">0</property>
+                <property name="max_width_chars">0</property>
+                <attributes>
+                  <attribute name="font-desc" value="&lt;Enter Value&gt; 22"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="left_attach">3</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="course_info_grid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_left">40</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <child>
+                  <object class="GtkLabel" id="info">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="label" translatable="yes">課程進度查尋
+
+
+
+
+
+
+
+
+
+
+
+
+</property>
+                    <property name="width_chars">0</property>
+                    <property name="max_width_chars">0</property>
+                    <property name="xalign">0.10000000149011612</property>
+                    <property name="yalign">0</property>
+                    <attributes>
+                      <attribute name="font-desc" value="&lt;Enter Value&gt; 16"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="personal-info-grid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">end</property>
+                <property name="margin_right">40</property>
+                <property name="margin_top">28</property>
+                <property name="hexpand">False</property>
+                <child>
+                  <object class="GtkLabel" id="name">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_right">12</property>
+                    <property name="label" translatable="yes">蔡育欽</property>
+                    <property name="width_chars">15</property>
+                    <property name="max_width_chars">15</property>
+                    <property name="xalign">1</property>
+                    <attributes>
+                      <attribute name="font-desc" value="&lt;Enter Value&gt; 20"/>
+                      <attribute name="stretch" value="expanded"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_bottom">4</property>
+                    <property name="pixbuf">name.png</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkImage" id="Isid">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_top">4</property>
+                    <property name="pixbuf">sid.png</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="pixbuf">cid.png</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_top">4</property>
+                    <property name="margin_bottom">4</property>
+                    <property name="pixbuf">time.png</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_top">4</property>
+                    <property name="margin_bottom">4</property>
+                    <property name="pixbuf">contact.png</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="sid">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_right">12</property>
+                    <property name="label" translatable="yes">123456789</property>
+                    <property name="width_chars">15</property>
+                    <property name="max_width_chars">15</property>
+                    <property name="xalign">1</property>
+                    <attributes>
+                      <attribute name="font-desc" value="&lt;Enter Value&gt; 16"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="cid">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_right">12</property>
+                    <property name="label" translatable="yes">EFRD2233</property>
+                    <property name="width_chars">15</property>
+                    <property name="max_width_chars">15</property>
+                    <property name="xalign">1</property>
+                    <attributes>
+                      <attribute name="font-desc" value="&lt;Enter Value&gt; 16"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_right">12</property>
+                    <property name="label" translatable="yes">+886 3 5776085</property>
+                    <property name="width_chars">15</property>
+                    <property name="max_width_chars">15</property>
+                    <property name="xalign">1</property>
+                    <attributes>
+                      <attribute name="font-desc" value="&lt;Enter Value&gt; 16"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkGrid" id="date-time">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="hexpand">True</property>
+                    <child>
+                      <object class="GtkLabel" id="date">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">2016/09/01</property>
+                        <property name="width_chars">15</property>
+                        <property name="max_width_chars">15</property>
+                        <property name="xalign">1</property>
+                        <attributes>
+                          <attribute name="font-desc" value="&lt;輸入數值&gt; 16"/>
+                        </attributes>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="time">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">11:22:33</property>
+                        <property name="width_chars">15</property>
+                        <property name="max_width_chars">15</property>
+                        <property name="xalign">1</property>
+                        <attributes>
+                          <attribute name="font-desc" value="&lt;Enter Value&gt; 16"/>
+                        </attributes>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">3</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">2</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="pixbuf">bar.png</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+                <property name="width">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="more-info-grid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="valign">end</property>
+                <child>
+                  <object class="GtkImage" id="Icode">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_left">10</property>
+                    <property name="margin_right">10</property>
+                    <property name="pixbuf">moodle.qr.png</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">6</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="qrmesg">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">更多資訊請參考 http://learning.kl.edu.tw/ 
+或手機掃描 QR Code </property>
+                    <attributes>
+                      <attribute name="font-desc" value="&lt;Enter Value&gt; 8"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">6</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">3</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="kl-nchc-logo">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">end</property>
+                <property name="valign">end</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="ypad">0</property>
+                <property name="pixbuf">footer.bar.png</property>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">3</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="footer-img">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="pixbuf">ucard-main-footer.png</property>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">8</property>
-            <property name="width">6</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkImage">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">start</property>
-            <property name="valign">start</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <property name="pixbuf">ucard-main-right.png</property>
-          </object>
-          <packing>
-            <property name="left_attach">6</property>
-            <property name="top_attach">1</property>
-            <property name="height">7</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="location">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_right">12</property>
-            <property name="label" translatable="yes">文 化 中 心  </property>
-            <property name="width_chars">15</property>
-            <property name="max_width_chars">15</property>
-            <property name="xalign">1</property>
-            <attributes>
-              <attribute name="font-desc" value="&lt;Enter Value&gt; 18"/>
-            </attributes>
-          </object>
-          <packing>
-            <property name="left_attach">5</property>
+            <property name="left_attach">0</property>
             <property name="top_attach">2</property>
+            <property name="width">3</property>
           </packing>
-        </child>
-        <child>
-          <object class="GtkImage">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="pixbuf">location.png</property>
-          </object>
-          <packing>
-            <property name="left_attach">4</property>
-            <property name="top_attach">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="name">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_right">12</property>
-            <property name="label" translatable="yes">蔡育欽</property>
-            <property name="width_chars">15</property>
-            <property name="max_width_chars">15</property>
-            <property name="xalign">1</property>
-            <attributes>
-              <attribute name="font-desc" value="&lt;Enter Value&gt; 20"/>
-              <attribute name="stretch" value="expanded"/>
-            </attributes>
-          </object>
-          <packing>
-            <property name="left_attach">5</property>
-            <property name="top_attach">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkImage">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="pixbuf">name.png</property>
-          </object>
-          <packing>
-            <property name="left_attach">4</property>
-            <property name="top_attach">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="sid">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_right">12</property>
-            <property name="label" translatable="yes">123456789</property>
-            <property name="width_chars">15</property>
-            <property name="max_width_chars">15</property>
-            <property name="xalign">1</property>
-            <attributes>
-              <attribute name="font-desc" value="&lt;Enter Value&gt; 18"/>
-            </attributes>
-          </object>
-          <packing>
-            <property name="left_attach">5</property>
-            <property name="top_attach">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkImage" id="Isid">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="pixbuf">sid.png</property>
-          </object>
-          <packing>
-            <property name="left_attach">4</property>
-            <property name="top_attach">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="cid">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_right">12</property>
-            <property name="label" translatable="yes">EFRD2233</property>
-            <property name="width_chars">15</property>
-            <property name="max_width_chars">15</property>
-            <property name="xalign">1</property>
-            <attributes>
-              <attribute name="font-desc" value="&lt;Enter Value&gt; 18"/>
-            </attributes>
-          </object>
-          <packing>
-            <property name="left_attach">5</property>
-            <property name="top_attach">5</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkImage">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="pixbuf">cid.png</property>
-          </object>
-          <packing>
-            <property name="left_attach">4</property>
-            <property name="top_attach">5</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="time">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_right">12</property>
-            <property name="label" translatable="yes">11:22:33</property>
-            <property name="width_chars">15</property>
-            <property name="max_width_chars">15</property>
-            <property name="xalign">1</property>
-            <attributes>
-              <attribute name="font-desc" value="&lt;Enter Value&gt; 18"/>
-            </attributes>
-          </object>
-          <packing>
-            <property name="left_attach">5</property>
-            <property name="top_attach">6</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkImage">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="pixbuf">time.png</property>
-          </object>
-          <packing>
-            <property name="left_attach">4</property>
-            <property name="top_attach">6</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="ypad">10</property>
-            <property name="label" translatable="yes">課程資訊：</property>
-            <property name="width_chars">20</property>
-            <property name="max_width_chars">20</property>
-            <property name="xalign">0.05000000074505806</property>
-            <attributes>
-              <attribute name="font-desc" value="&lt;Enter Value&gt; 22"/>
-            </attributes>
-          </object>
-          <packing>
-            <property name="left_attach">3</property>
-            <property name="top_attach">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkImage">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="pixbuf">note.png</property>
-          </object>
-          <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="info">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="ypad">40</property>
-            <property name="label" translatable="yes">新課程:
-AAAAAAAAA
-繼續課程：
-BBBBBBBBB
-CCCCCCCCC
-DDDDDDDD
-完成課程：
-EEEEEEEEEE
-FFFFFFFFFFF</property>
-            <property name="width_chars">30</property>
-            <property name="max_width_chars">30</property>
-            <property name="xalign">0.070000000298023224</property>
-            <property name="yalign">0</property>
-            <attributes>
-              <attribute name="font-desc" value="&lt;Enter Value&gt; 20"/>
-            </attributes>
-          </object>
-          <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">3</property>
-            <property name="width">2</property>
-            <property name="height">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkImage">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">end</property>
-            <property name="valign">start</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <property name="pixbuf">ucard-main-left.png</property>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">1</property>
-            <property name="height">7</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkImage">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="ypad">12</property>
-            <property name="pixbuf">footer.bar.png</property>
-          </object>
-          <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">7</property>
-            <property name="width">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkImage">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="pixbuf">contact.png</property>
-          </object>
-          <packing>
-            <property name="left_attach">4</property>
-            <property name="top_attach">7</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_right">12</property>
-            <property name="label" translatable="yes">+886 3 5776085</property>
-            <property name="width_chars">15</property>
-            <property name="max_width_chars">15</property>
-            <property name="xalign">1</property>
-          </object>
-          <packing>
-            <property name="left_attach">5</property>
-            <property name="top_attach">7</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkImage">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="ypad">2</property>
-            <property name="pixbuf">bar.png</property>
-          </object>
-          <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">1</property>
-            <property name="width">4</property>
-          </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
         </child>
       </object>
     </child>
