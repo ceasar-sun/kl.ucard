@@ -140,6 +140,7 @@ class UpdateData():
 		self.error_labels('網路異常')
 		if debug: print "access data error: url = %s" % url
                 time.sleep(1)
+		return False
 
         ctime = time.strftime('%H:%M:%S')
         cdate = time.strftime('%Y/%m/%d')
