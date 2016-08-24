@@ -163,7 +163,7 @@ foreach ($JUPcourse as $name => $value){
 if($debug==1){echo "<p>JSON:</p>";}
 if($debug==1){echo "<pre>";}
 if ($status === 1){
-    echo "{\"status\":\"$status\",\"result\":{\"sid\":\"$sid\",\"rfid_keyout\":\"$rfid_keyout\",\"name\":\"$moodleuser[fullname]\"},\"courses\":".json_encode($Jcourse)."}";
+    echo "{\"status\":\"$status\",\"result\":{\"moodleid\":\"$moodleid\",\"sid\":\"$sid\",\"rfid_keyout\":\"$rfid_keyout\",\"name\":\"$moodleuser[fullname]\"},\"courses\":".json_encode($Jcourse)."}";
 } else {
     echo "{\"status\":\"$status\"}";
 }
