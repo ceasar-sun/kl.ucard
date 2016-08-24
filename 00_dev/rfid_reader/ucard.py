@@ -66,6 +66,16 @@ class UpdateData():
 	if self.access_moodle() == True:
 	    self.update_labels()
 
+    def running_labels(self):
+        self.lbs['date'].set_text(time.strftime('%Y/%m/%d'))
+	self.lbs['time'].set_text(time.strftime('%H:%M:%S'))
+	self.lbs['name'].set_text("")
+	self.lbs['info'].set_text("\n課程資料讀取中，請稍候")
+	self.lbs['sid'].set_text("")
+	self.lbs['cid'].set_text("")
+	path="icon/moodle.qr.png"
+	self.lbs['qrcode'].set_from_file(path)
+
     def error_labels(self, mesg):
         self.lbs['date'].set_text(time.strftime('%Y/%m/%d'))
 	self.lbs['time'].set_text(time.strftime('%H:%M:%S'))
@@ -119,6 +129,7 @@ class UpdateData():
 	    if debug: print "same id %s = %s, keep data\n" % (Ustatus['id'], self.rfid_key16)
 	    return False
 	else:
+	    self.running_labels()
             try:
                 url = "%s/ucard1.php?rfid_key16=%s&location=%s" % (Ucard_url, Ustatus['id'], self.locationid)
                 r = requests.get(url)
