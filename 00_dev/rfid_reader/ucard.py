@@ -15,10 +15,10 @@ from qrcode import *
 debug=1
 
 Udata={}
-Ustatus={'device':'no', 'card':'no', 'id':'no'}
+Ustatus={'device':'no', 'card':'no', 'id':'no', 'oid':'no'}
 Ulbs={}
-Uconf={'locationid':10, 'location_name':"文化中心"}
-Ucard_url="http://moodle.nchc.org.tw/moodle/local/ucard"
+Uconf={'locationid':1, 'location_name':"海生館"}
+Ucard_url="http://learning.kl.edu.tw/moodle/local/ucard"
 
 class readucarddata(threading.Thread):
 
@@ -38,11 +38,11 @@ class readucarddata(threading.Thread):
                     Ustatus['device'] == 'yes'
                 self.rfid_key16 = rfid.read()
 		if self.rfid_key16 == False:
-                    Ustatus={'device':'no', 'card':'no', 'id':'no'}
+		    Ustatus={'device':'no', 'card':'no', 'id':'no', 'oid':'no'}
 		else:
-                    Ustatus={'device':'yes', 'card':'yes', 'id':self.rfid_key16}
+		    Ustatus={'device':'yes', 'card':'yes', 'id':self.rfid_key16, 'oid':'no'}
             except:
-                Ustatus={'device':'no', 'card':'no', 'id':'no'}
+		Ustatus={'device':'no', 'card':'no', 'id':'no', 'oid':'no'}
 		Udata={}
                 continue
 
@@ -52,7 +52,6 @@ class UpdateData():
     def __init__(self, lbs):
 	#threading.Thread.__init__(self)
 	self.lbs = Ulbs
-	self.rfid_key16 = ""
 	self.locationid=Uconf['locationid']
 	self.run()
 
@@ -67,14 +66,7 @@ class UpdateData():
 	    self.update_labels()
 
     def running_labels(self):
-        self.lbs['date'].set_text(time.strftime('%Y/%m/%d'))
-	self.lbs['time'].set_text(time.strftime('%H:%M:%S'))
-	self.lbs['name'].set_text("")
-	self.lbs['info'].set_text("\n課程資料讀取中，請稍候")
-	self.lbs['sid'].set_text("")
-	self.lbs['cid'].set_text("")
-	path="icon/moodle.qr.png"
-	self.lbs['qrcode'].set_from_file(path)
+	self.lbs['info'].set_text("\n課程資料讀取中，請稍候\n")
 
     def error_labels(self, mesg):
         self.lbs['date'].set_text(time.strftime('%Y/%m/%d'))
@@ -122,11 +114,10 @@ class UpdateData():
 	if Ustatus['card'] == "no":
 	    if debug: print "no card"
 	    Udata={}
-	    self.rfid_key16 = ""
 	    self.clear_labels()
 	    return False
-	elif Ustatus['id'] == self.rfid_key16:
-	    if debug: print "same id %s = %s, keep data\n" % (Ustatus['id'], self.rfid_key16)
+	elif Ustatus['id'] == Ustatus['oid']:
+	    if debug: print "same id, keep data\n"
 	    return False
 	else:
 	    self.running_labels()
@@ -141,7 +132,7 @@ class UpdateData():
                     sid = moodle_data['sid']
                     rfid_keyout = moodle_data['rfid_keyout']
                     name = moodle_data['name']
-		    self.rfid_key16 = Ustatus['id']
+		    Ustatus['oid'] = Ustatus['id']
                 else:
 	            self.error_labels('moodle 資料錯誤')
 		    return False
@@ -149,6 +140,7 @@ class UpdateData():
 		self.error_labels('網路異常')
 		if debug: print "access data error: url = %s" % url
                 time.sleep(1)
+		return False
 
         ctime = time.strftime('%H:%M:%S')
         cdate = time.strftime('%Y/%m/%d')
@@ -161,7 +153,7 @@ class UpdateData():
 		    cmesg = u'完成'
 		coursemesg = u"課程 %s, %s\n" % (coursename, cmesg)
                 dedented_mesg = textwrap.dedent(coursemesg)
-                wrap_coursemesg = textwrap.fill(dedented_mesg, width=14)
+                wrap_coursemesg = textwrap.fill(dedented_mesg, width=22)
 		course_label_mesg = course_label_mesg+"\n"+wrap_coursemesg
         udata={'name':name, 'moodleid':moodleid, 'sid':sid, 'location':location, 'rfid_keyout':rfid_keyout, 'time':ctime, 'date':cdate, 'course':course_label_mesg}
 	Udata = udata
@@ -177,11 +169,13 @@ lsid = builder.get_object("sid")
 lcid = builder.get_object("cid")
 ldate = builder.get_object("date")
 ltime = builder.get_object("time")
+llocation = builder.get_object("location")
 lqrcode = builder.get_object("Icode")
-lbs = {'name':lname, 'info':linfo, 'sid':lsid, 'cid':lcid, 'date':ldate, 'time':ltime, 'qrcode':lqrcode}
+lbs = {'name':lname, 'info':linfo, 'sid':lsid, 'cid':lcid, 'date':ldate, 'time':ltime, 'qrcode':lqrcode, 'location':llocation}
 Ulbs=lbs
 window.connect("delete-event", Gtk.main_quit)
 GObject.timeout_add_seconds(2, UpdateData, lbs)
+llocation.set_text(Uconf['location_name'])
 window.show_all()
 
 #thrUpdate = UpdateData(lbs)
