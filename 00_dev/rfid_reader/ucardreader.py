@@ -6,10 +6,18 @@ import datetime
 import requests
 from smartcard.System import readers
 from smartcard.util import toHexString
+import struct
+
 readerid=2
 
 # debug
-debug=0
+debug=1
+
+# output format, decimal is 'dec', hexadecimal is 'hex'
+format='dec'
+
+#reverse
+reverse=1
 
 class Ureader():
     def __init__(self):
@@ -33,8 +41,16 @@ class Ureader():
 	    if debug: print "%x %x" % (sw1, sw2)
 	    #90 0
 	    if debug: print data
-	    #cardid = ''.join(str(e) for e in data)
-	    cardid = ''.join(hex(e).upper()[2:] for e in data)
+	    if format == 'hex' and reverse=0:
+		cardid = toHexString(data).replace(' ','')
+	    elif format == 'hex' and reverse=1:
+		cardid = toHexString(data[::-1]).replace(' ','')
+	    elif format == 'dec' and reverse=0:
+		cardid = toHexString(data).replace(' ','')
+		cardid = int(cardid, 16)
+	    elif format == 'dec' and reverse=1:
+		cardid = toHexString(data[::-1]).replace(' ','')
+		cardid = int(cardid, 16)
 	    if debug: print "cardid: %s" % cardid
 	    return cardid
 	except:
