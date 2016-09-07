@@ -78,8 +78,8 @@ class auth_plugin_openid extends auth_plugin_base {
 	    // 取得 guid 放入 idnumber 欄位
 	    // 因暫時無法取得 guid 資訊，用 birthday 測試用
             $idnumber = '';
-            if (isset($attributes['guid'])) {
-		$idnumber = $attributes['guid'];
+            if (isset($attributes['ax_value_person_guid_1'])) {
+		$idnumber = $attributes['ax_value_person_guid_1'];
 	    }
 	    else {
 		$idnumber = 'no-guid';

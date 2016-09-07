@@ -66,6 +66,10 @@ if (!empty($city)) {
                 'contact/country/home',
                 'pref/language',
                 'pref/timezone',
+                'person/guid',
+            );
+            $openid->required = array(
+                'person/guid',
             );
             $openid->returnUrl = $CFG->wwwroot . '/login/index.php';
 
