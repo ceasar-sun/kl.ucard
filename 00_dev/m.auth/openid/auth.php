@@ -29,6 +29,7 @@ class auth_plugin_openid extends auth_plugin_base {
 		set_config('field_updatelocal_email', 'onlogin', 'auth/openid');
 		// Add what field you want to receive by openID
 		set_config('field_updatelocal_idnumber', 'onlogin', 'auth/openid');
+		set_config('field_updatelocal_institution', 'onlogin', 'auth/openid');
     }
 
     /**
@@ -78,11 +79,19 @@ class auth_plugin_openid extends auth_plugin_base {
 	    // 取得 guid 放入 idnumber 欄位
 	    // 因暫時無法取得 guid 資訊，用 birthday 測試用
             $idnumber = '';
-            if (isset($attributes['guid'])) {
-		$idnumber = $attributes['guid'];
+            if (isset($attributes['ax_value_person_guid_1'])) {
+		$idnumber = $attributes['ax_value_person_guid_1'];
 	    }
 	    else {
 		$idnumber = 'no-guid';
+	    }
+
+            $schoolid = '';
+            if (isset($attributes['ax_value_school_id_1'])) {
+		$schoolid = $attributes['ax_value_school_id_1'];
+	    }
+	    else {
+		$schoolid = 'no-schoolid';
 	    }
 
             return array(
@@ -90,6 +99,7 @@ class auth_plugin_openid extends auth_plugin_base {
                 'lastname' => mb_substr($name, 0, 1, 'UTF-8'),
                 'email' => $email,
                 'idnumber' => $idnumber,
+                'institution' => $schoolid,
             );
         }
 

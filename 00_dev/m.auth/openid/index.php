@@ -66,7 +66,12 @@ if (!empty($city)) {
                 'contact/country/home',
                 'pref/language',
                 'pref/timezone',
+                'person/guid',
+                'school/id',
             );
+            /*$openid->required = array(
+                'person/guid',
+            );*/
             $openid->returnUrl = $CFG->wwwroot . '/login/index.php';
 
             header('Location: ' . $openid->authUrl());
