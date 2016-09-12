@@ -30,9 +30,6 @@ require_once('lib.php');
 /* Add via 樂學計畫：註冊時，根據帳號區分學生與教師身分，並自動加入群組(學生:5, 教師:2,3)功能
 	# 寫入資料庫是Moodle資料庫/ mdl_role_assignments Table.
 	# 程式撰寫於 login/index.php  最上方，require()引入程式庫之後
-	# Dev log: 
-		* 0705 : Jonathan release (Jonathan)
-		* 0707 : add roleid 2, 3 for teacher  (Ceasar)
 */
 global $DB;
 global $USER;
@@ -58,14 +55,18 @@ if($uid != 0){
       $record1->itemid = 0;
 
       $record1->roleid = 2;
-      $records = array($record1);
-      $lastinsertid = $DB->insert_records('role_assignments', $records);
-      error_log(' -- 3.insert roleid="'. $record1->roleid . '":' . print_r($lastinsertid, true));
+      //$records = array($record1);
+      // $lastinsertid = $DB->insert_records('role_assignments', $records);
+      //error_log(' -- skip insert roleid="'. $record1->roleid . '":' . print_r($lastinsertid, true));
+      // 9/12: 根據辛老師，不自動指定教師身份
+      error_log(' -- skip insert roleid="'. $record1->roleid );
 
       $record1->roleid = 3;
-      $records = array($record1);
-      $lastinsertid = $DB->insert_records('role_assignments', $records);
-      error_log(' -- 3.insert roleid="'. $record1->roleid . '":' . print_r($lastinsertid, true));
+      //$records = array($record1);
+      //$lastinsertid = $DB->insert_records('role_assignments', $records);
+      //error_log(' -- skip roleid="'. $record1->roleid . '":' . print_r($lastinsertid, true));
+      // 9/12: 根據辛老師，不自動指定教師身份
+      error_log(' -- skip insert roleid="'. $record1->roleid );
     }
   }
   elseif ($firstChar=='s'){
@@ -78,10 +79,12 @@ if($uid != 0){
       $record1->modifierid = 2;
       $record1->sortorder = 0;
       $record1->itemid = 0;
-      $records = array($record1);
+      //$records = array($record1);
 
-      $lastinsertid = $DB->insert_records('role_assignments', $records);
-      error_log(' -- 3.insert Student role: ' . print_r($lastinsertid, true));
+      //$lastinsertid = $DB->insert_records('role_assignments', $records);
+      //error_log(' -- 3.insert Student role: ' . print_r($lastinsertid, true));
+      // 9/12: 根據辛老師，不自動指定教師身份
+      error_log(' -- skip insert roleid="'. $record1->roleid );
     }
   }
 }
