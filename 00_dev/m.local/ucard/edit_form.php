@@ -7,6 +7,7 @@ class courselevel_form extends moodleform {
     function definition() {
 	global $CFG;
 	global $DB;
+	$permission = 0;
 	$mform = $this->_form;
 	$categoryid = $this->_customdata['category'];
 	$rs = $DB->get_records('courselevel');
@@ -22,14 +23,23 @@ class courselevel_form extends moodleform {
 	};
 	$limit = $DB->count_records('course', array('category'=>$categoryid));
 	foreach ($rs as $record) {
+
 	    $course = get_course($record->courseid);
+
 	    if ($course->category == $categoryid){
 
 		$mform->addElement('header', null, get_string("updatelevelof", 'local_ucard', $course->fullname));
-		$mform->addElement('text', $record->id, get_string("level", 'local_ucard'));
-		$mform->setDefault($record->id,$record->level);
-		$mform->setType($record->id, PARAM_INT);
-		//$mform->addRule($record->id, "level value error(1~$limit)", 'callback', $level_check, 'server', false, true);
+		$course_context = get_context_instance(CONTEXT_COURSE, $record->courseid);
+		if (has_capability('moodle/role:assign', $course_context)) {
+		    $permission = 1;
+		    $mform->addElement('text', $record->id, get_string("level", 'local_ucard'));
+		    $mform->setDefault($record->id,$record->level);
+		    $mform->setType($record->id, PARAM_INT);
+		    //$mform->addRule($record->id, "level value error(1~$limit)", 'callback', $level_check, 'server', false, true);
+		}else{
+		    $mform->addElement('static', 'description', get_string("level", 'local_ucard'), $record->level);
+		    $mform->addElement('hidden', $record->id, $record->level);
+		}
 	    }
 	}
 
@@ -37,7 +47,13 @@ class courselevel_form extends moodleform {
 	$mform->setType('save', PARAM_TEXT);
 	$mform->addElement('hidden', 'category', $categoryid);
 	$mform->setType('category', PARAM_INT);
-	$this->add_action_buttons();
+	if ($permission == 1){
+	    $this->add_action_buttons();
+	} else {
+	    $buttonarray=array();
+	    $buttonarray[] =& $mform->createElement('submit', 'cancel', get_string('cancel'));
+	    $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
+	}
     }
 
     function validation($data, $files) {

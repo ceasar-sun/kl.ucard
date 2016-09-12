@@ -17,8 +17,10 @@ $site = get_site();
 if ($CFG->forcelogin) {
     require_login();
 }
-$context = context_system::instance();
-require_capability('local/ucard:change', $context);
+if ((is_ucard_teacher($USER->id) == false) && (is_siteadmin() == false)){
+    $context = context_system::instance();
+    require_capability('local/ucard:change', $context);
+}
 global $CFG;
 global $DB;
 //$DB->set_debug(true);
