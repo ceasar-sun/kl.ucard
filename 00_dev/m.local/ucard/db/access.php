@@ -20,16 +20,18 @@ $capabilities = array(
 	    'coursecreator' => CAP_ALLOW,
             'teacher' => CAP_ALLOW,
             'manager'  => CAP_ALLOW
+            //'user' => CAP_ALLOW
         )
     ),
     'local/ucard:view' => array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes'   => array(
-            'editingteacher' => CAP_ALLOW,
-	    'coursecreator' => CAP_ALLOW,
-            'teacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
+            //'editingteacher' => CAP_ALLOW,
+	    //'coursecreator' => CAP_ALLOW,
+            //'teacher' => CAP_ALLOW,
+            //'manager' => CAP_ALLOW
+            'user' => CAP_ALLOW
         )
     ),
     'local/ucard:viewlog' => array(

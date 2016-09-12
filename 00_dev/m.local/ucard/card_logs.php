@@ -19,9 +19,11 @@ $PAGE->set_pagelayout('standard');
 if ($CFG->forcelogin) {
     require_login();
 }
+$isUcardTeacher = 0;
 $context = context_system::instance();
 require_capability('local/ucard:viewlog', $context);
-if(has_capability('local/ucard:view', $context)){
+if(is_siteadmin() == true){
+//if(has_capability('local/ucard:view', $context)){
     $isUcardTeacher = 1;
 }
 
@@ -59,7 +61,7 @@ $querylimit = 20;
 
 $ucard = new UCard($db, $username, $password);
 $ucard->init_moodle($token, $server, $dir);
-if(has_capability('local/ucard:view', $context)){
+if($isUcardTeacher == 1){
     $cardlogs = $ucard->listCardLogs($querylimit);
 }else{
     $cardlogs = $ucard->listUserCardLogs($USER->id, $querylimit);
