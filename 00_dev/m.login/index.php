@@ -27,7 +27,11 @@
 require('../config.php');
 require_once('lib.php');
 
-/* Add via 樂學計畫：註冊時，根據帳號區分學生與教師身分，並自動加入群組(學生:5, 教師:2,3)功能
+/* 
+  0912:
+	# 根據辛老師建議，移除自動加入教師與學生身份
+  Init:
+  Add via 樂學計畫：註冊時，根據帳號區分學生與教師身分，並自動加入群組(學生:5, 教師:2,3)功能
 	# 寫入資料庫是Moodle資料庫/ mdl_role_assignments Table.
 	# 程式撰寫於 login/index.php  最上方，require()引入程式庫之後
 */
