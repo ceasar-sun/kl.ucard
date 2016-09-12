@@ -14,11 +14,15 @@ require_once('lib.php');
 
 $site = get_site();
 $PAGE->set_pagelayout('standard');
-if ($CFG->forcelogin) {
-    require_login();
-}
+require_login();
+
 $context = context_system::instance();
-require_capability('local/ucard:change', $context);
+require_capability('local/ucard:view', $context);
+if ((is_ucard_teacher($USER->id) == false) && (is_siteadmin() == false)){
+    $context = context_system::instance();
+    require_capability('local/ucard:change', $context);
+}
+
 global $CFG;
 global $DB;
 

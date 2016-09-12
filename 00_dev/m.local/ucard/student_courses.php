@@ -85,9 +85,15 @@ $PAGE->set_title(get_string("welcome", 'local_ucard'));
 
 $navbar = init_ucard_nav($PAGE);
 
+$isUcardTeacher = 0;
+if(is_siteadmin() == true){
+//if(has_capability('local/ucard:view', $context)){
+    $isUcardTeacher = 1;
+}
+
 echo $OUTPUT->header(); 
 echo $OUTPUT->skip_link_target();
-if(has_capability('local/ucard:view', $context)){
+if($isUcardTeacher == 1){
     $moodleid = optional_param('moodleid', 0, PARAM_INT);
 }else{
     $moodleid = $USER->id;

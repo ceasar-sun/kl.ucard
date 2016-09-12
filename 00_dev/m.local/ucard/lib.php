@@ -211,3 +211,22 @@ function get_last_courses($userlevel, $track){
     }
     return $result;
 }
+
+function is_ucard_teacher($moodleid){
+
+    $permission = 0;
+    $mycourses = enrol_get_users_courses($moodleid);
+    foreach ($mycourses as $mycourse){
+	$cid = $mycourse->id;
+	$course_context = get_context_instance(CONTEXT_COURSE, $cid);
+	if (has_capability('moodle/role:assign', $course_context)) {
+	    $permission = 1;
+	    break;
+	}
+    }
+    if ($permission == 0){
+	return false;
+    }else{
+	return true;
+    }
+}
