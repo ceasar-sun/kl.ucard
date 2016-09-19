@@ -337,6 +337,18 @@ class UCard {
     }
 
 
+    public function getMoodleIDbyEmail($email){
+	$search['key']="email";
+	$search['value']=$email;
+	$api='core_user_get_users';
+	$params = array(array($search));
+	$response = $this->executeMoodleAPI($api, $params);
+        //var_dump($response);
+	$data = $response['users'][0];
+	$moodleid = $data['id'];
+	return $moodleid;
+    }
+
     public function getMoodleUserbyStudentID($sid){
 	$search['key']="idnumber";
 	$search['value']=$sid;
