@@ -6,6 +6,7 @@ $dir = '/moodle'; // May be null if moodle runs in the root directory in the ser
 // Initialize the class.
 
 $params=array('idnumber', array('11223344'));
+$params=array('email', array('s1@nchc.org.tw'));
 $request = xmlrpc_encode_request('core_user_get_users_by_field', $params, array('encoding'=>'UTF-8'));
 
 //var_dump($request);  // In case you want to see XML.
