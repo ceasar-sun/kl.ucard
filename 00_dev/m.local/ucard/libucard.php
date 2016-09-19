@@ -149,16 +149,48 @@ class UCard {
 	$request = xmlrpc_encode_request($api, $params, array('encoding'=>'UTF-8'));
 
 	//var_dump($request);  // In case you want to see XML.
+// ssl issue, this not work
+//
+//	$context = stream_context_create(array(
+//			'http' => array(
+//				'method' => "POST",
+//				'header' => "Content-Type: text/xml",
+//				'content' => $request
+//				),
+//			'ssl' => array(
+//				"verify_peer"=>false,
+//				"verify_peer_name"=>false
+//				)
+//			));
+//
+//	$path = $this->moodle_server.$this->moodle_path."/webservice/xmlrpc/server.php?wstoken=".$this->moodle_token;
+//	// Send XML to server and get a reply from it.
+//	$file = file_get_contents($path, false, $context); // $file is the reply from server.
 
-	$context = stream_context_create(array('http' => array(
-			'method' => "POST",
-			'header' => "Content-Type: text/xml",
-			'content' => $request
-			)));
 
-	$path = $this->moodle_server.$this->moodle_path."/webservice/xmlrpc/server.php?wstoken=".$this->moodle_token;
-	// Send XML to server and get a reply from it.
-	$file = file_get_contents($path, false, $context); // $file is the reply from server.
+// replace with curl
+	$server_url = $this->moodle_server.$this->moodle_path."/webservice/xmlrpc/server.php?wstoken=".$this->moodle_token;
+	$req = curl_init($server_url);
+	// Using the cURL extension to send it off,  first creating a custom header block
+	$headers = array();
+	array_push($headers,"Content-Type: text/xml");
+	array_push($headers,"Content-Length: ".strlen($request));
+	array_push($headers,"\r\n");
+
+	//URL to post to
+	curl_setopt($req, CURLOPT_URL, $server_url);
+
+	//Setting options for a secure SSL based xmlrpc server
+	curl_setopt( $req, CURLOPT_CUSTOMREQUEST, 'POST' );
+	curl_setopt($req, CURLOPT_HTTPHEADER, $headers );
+	curl_setopt( $req, CURLOPT_POSTFIELDS, $request );
+	curl_setopt($req, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($req, CURLOPT_SSL_VERIFYPEER, true);
+	curl_setopt($req, CURLOPT_SSL_VERIFYHOST, 2);
+
+	//Finally run
+	$file = curl_exec($req);
+
 	// Decode the reply.
 	$response = xmlrpc_decode($file);
 
@@ -305,12 +337,25 @@ class UCard {
     }
 
 
+    public function getMoodleIDbyEmail($email){
+	$search['key']="email";
+	$search['value']=$email;
+	$api='core_user_get_users';
+	$params = array(array($search));
+	$response = $this->executeMoodleAPI($api, $params);
+        //var_dump($response);
+	$data = $response['users'][0];
+	$moodleid = $data['id'];
+	return $moodleid;
+    }
+
     public function getMoodleUserbyStudentID($sid){
 	$search['key']="idnumber";
 	$search['value']=$sid;
 	$api='core_user_get_users';
 	$params = array(array($search));
 	$response = $this->executeMoodleAPI($api, $params);
+        //var_dump($response);
 	$data = $response['users'][0];
 	return $data;
     }
