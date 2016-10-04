@@ -50,7 +50,11 @@ function list_student_courses($moodleid){
 	} else if ($courseStatus === FALSE) {
 	    $coursestatus = "in progress";
 	} else {
-	    $coursestatus = "error/never regist?";
+	    if(is_ucard_teacher($USER->id) == false){
+		$coursestatus = "error/never regist?";
+	    }else {
+		$coursestatus = "Teacher";
+	    }
 	}
 
 	$coursename_url = new moodle_url('/course/view.php', array('id'=>$courseid));
@@ -60,6 +64,7 @@ function list_student_courses($moodleid){
 		      $ucard->getLevelbyCourse($courseid),
 		      $coursestatus
 		      );
+	var_dump($ucard->getLevelbyCourse($courseid));
 	$table->add_data($data);
 
     }

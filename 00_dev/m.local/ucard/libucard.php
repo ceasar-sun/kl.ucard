@@ -449,7 +449,7 @@ class UCard {
 	$api='core_completion_get_course_completion_status';
 	$response = $this->executeMoodleAPI($api, $params);
 	if (array_key_exists('faultCode', $response)){
-	    echo "課程 $course 錯誤: $response[faultString]($response[faultCode])<br>\n";
+	    #echo "課程 $course 異常: $response[faultString]($response[faultCode])<br>\n";
 	    return "ERROR";
 	}
 	return $response['completionstatus']['completed'];
