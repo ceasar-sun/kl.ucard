@@ -29,6 +29,10 @@ $ucard->init_moodle($token, $server, $dir);
 function list_student_courses($moodleid){
     global $ucard;
     $usercourses = $ucard->getUserCourses($moodleid);
+    $teacher=0;
+    if(is_ucard_teacher($moodleid) == true){
+	$teacher=1;
+    }
 
     $html = "<p></p>\n";
 
@@ -50,7 +54,7 @@ function list_student_courses($moodleid){
 	} else if ($courseStatus === FALSE) {
 	    $coursestatus = "in progress";
 	} else {
-	    if(is_ucard_teacher($USER->id) == false){
+	    if($teacher == 0){
 		$coursestatus = "error/never regist?";
 	    }else {
 		$coursestatus = "Teacher";
@@ -64,7 +68,6 @@ function list_student_courses($moodleid){
 		      $ucard->getLevelbyCourse($courseid),
 		      $coursestatus
 		      );
-	var_dump($ucard->getLevelbyCourse($courseid));
 	$table->add_data($data);
 
     }
