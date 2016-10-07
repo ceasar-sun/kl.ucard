@@ -1,6 +1,7 @@
 <!-- No config needed -->
 <div style="text-align: center"><?php print_string('auth_openidsettings', 'auth_openid');?></div>
-這個認證模組由新竹縣教育雲計畫開發，用來連結各縣市OpenID認證服務
+<p>
+這個認證模組由新竹縣教育雲計畫開發，<a href="http://www.nchc.org.tw">國家高速網路與計算中心</a>參與基隆市樂學網計劃協助修正，用來連結各縣市OpenID認證服務。
 <table cellspacing="0" cellpadding="5" border="0">
 <?php
 print_auth_lock_options($this->authtype, $user_fields,get_string('auth_fieldlocks_help', 'auth'), false, false, $this->get_custom_user_profile_fields());
