@@ -109,6 +109,7 @@ function recursivecategorynamebyid($categoryid){
 }
 
 function levelcheck($data){
+    $data = array_diff($data, array(0));
     if(count(array_unique($data))<count($data))
     {
 	// Array has duplicates
