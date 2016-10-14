@@ -509,5 +509,19 @@ class UCard {
 	return $newcourseid;
 
     }
+
+    public function getLocationID($location){
+	$search_name["key"]="name";
+	$search_name["value"]=$location;
+	$search_parent["key"]="parent";
+	$search_parent["value"]="0";
+	$params = array(array($search_name, $search_parent),'0'); 
+
+	$api='core_course_get_categories';
+	$response = $this->executeMoodleAPI($api, $params);
+
+	return $response[0]['id'];
+    }
+
 }
 ?>
