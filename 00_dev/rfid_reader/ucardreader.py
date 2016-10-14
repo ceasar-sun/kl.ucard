@@ -14,10 +14,12 @@ readerid=2
 debug=1
 
 # output format, decimal is 'dec', hexadecimal is 'hex'
-format='dec'
+#format='dec'
+format='hex'
 
 #reverse
-reverse=1
+#reverse=1
+reverse=0
 
 class Ureader():
     def __init__(self):
@@ -41,14 +43,14 @@ class Ureader():
 	    if debug: print "%x %x" % (sw1, sw2)
 	    #90 0
 	    if debug: print data
-	    if format == 'hex' and reverse=0:
+	    if format == 'hex' and reverse == 0:
 		cardid = toHexString(data).replace(' ','')
-	    elif format == 'hex' and reverse=1:
+	    elif format == 'hex' and reverse == 1:
 		cardid = toHexString(data[::-1]).replace(' ','')
-	    elif format == 'dec' and reverse=0:
+	    elif format == 'dec' and reverse == 0:
 		cardid = toHexString(data).replace(' ','')
 		cardid = int(cardid, 16)
-	    elif format == 'dec' and reverse=1:
+	    elif format == 'dec' and reverse == 1:
 		cardid = toHexString(data[::-1]).replace(' ','')
 		cardid = int(cardid, 16)
 	    if debug: print "cardid: %s" % cardid
