@@ -1,0 +1,16 @@
+<table class='gmisc_table' style='border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;' >
+<thead>
+<tr>
+<th style='border-left: 2px solid grey;border-right: 2px solid grey;border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;'>mean Descriptive Statistics</th>
+<th style='border-left: 2px solid grey;border-right: 2px solid grey;border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;'>std Descriptive Statistics</th>
+<th style='border-left: 2px solid grey;border-right: 2px solid grey;border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;'>skewness Descriptive Statistics</th>
+<th style='border-left: 2px solid grey;border-right: 2px solid grey;border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;'>kurtosis Descriptive Statistics</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style='border-left: 2px solid grey;border-right: 2px solid grey;border-bottom: 2px solid grey; text-align: center;'>85.5807317073171 A</td>
+<td style='border-left: 2px solid grey;border-right: 2px solid grey;border-bottom: 2px solid grey; text-align: center;'>15.8109631885986 B</td>
+<td style='border-left: 2px solid grey;border-right: 2px solid grey;border-bottom: 2px solid grey; text-align: center;'>-2.05796262142631 C</td>
+<td style='border-left: 2px solid grey;border-right: 2px solid grey;border-bottom: 2px solid grey; text-align: center;'>3.84775192299228 D</td>
+</tr>

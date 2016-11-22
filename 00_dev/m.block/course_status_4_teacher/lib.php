@@ -68,12 +68,23 @@
                              LEFT JOIN `mdl_role_assignments` ra ON ( ra.contextid = ct.id )
                              WHERE ct.contextlevel = 50
                              AND cr.id = ?
+                             AND ra.roleid = 5
                              GROUP BY cr.shortname, cr.fullname
                              ORDER BY `enrolled` ASC',
                               array($cid));
 
+error_log(' -- course count: ', print_r($total_sel_c[$cid]->enrolled, true));
 
-   return $total_sel_c[$cid]->enrolled;
+$tmpCount = $total_sel_c[$cid]->enrolled;
+
+if ($tmpCount < 1)
+{
+    $tmpCount = 0;
+}
+
+
+
+   return $tmpCount;
  }
 
 
@@ -128,19 +139,14 @@ function get_inprogress_courses($uid)
     $tmp_compl = get_compl_course($uid);
     $tmp_compl_courses = json_decode(json_encode($tmp_compl), True);
 
-    error_log(' - uid: ' . print_r($uid, true));
-    error_log(' - enrol: ' . print_r($tmp_enrol_courses, true));
-    error_log(' - compl: ' . print_r($tmp_compl_courses, true));
+    // error_log(' - uid: ' . print_r($uid, true));
+    // error_log(' - enrol: ' . print_r($tmp_enrol_courses, true));
+    // error_log(' - compl: ' . print_r($tmp_compl_courses, true));
 
     $result = search_inprogress_course($tmp_enrol_courses, $tmp_compl_courses);
-    // session_start();
-    // $_SESSION['$inprogression_uid'] = $uid;
-    // $_SESSION['$inprogress_course_list_row'] = $result;
 
-    error_log(' -- inprogress result: ' . print_r($result, true));
 
     return $result;
-    // return '檢視列表'; //$result[0][fullname];
 }
 
 
@@ -182,7 +188,9 @@ function get_this_students_of_enrolled_course($uid)
                                                           FROM {user_enrolments} ue
                                                             JOIN {user} u ON u.id = ue.userid
                                                             JOIN {enrol} e ON e.id = ue.enrolid
+                                                            JOIN {role_assignments} ra ON ra.userid = u.id
                                                           WHERE ue.userid = u.id
+                                                            AND ra.roleid = 5
                                                        ORDER BY u.id
                                                           ');
 
@@ -272,9 +280,46 @@ function count_course_criteria($userid)
 function module_name($id)
 {
     global $DB;
+
+    $module = $DB->get_record_sql('SELECT ca.name, ca.path FROM {course_categories} ca  WHERE id = ?', array($id));
+    $module = format_string($module->name);
+
+    return $module;
+}
+
+
+function get_categ_path($id)
+{
+    global $DB;
+
+    $module = $DB->get_record_sql('SELECT ca.path FROM {course_categories} ca  WHERE id = ?', array($id));
+    $module = format_string($module->path);
+
+    return $module;
+}
+
+
+function get_categ_name($id)
+{
+    global $DB;
+
     $module = $DB->get_record_sql('SELECT name FROM {course_categories}  WHERE id = ?', array($id));
     $module = format_string($module->name);
+
     return $module;
+}
+
+
+
+function venue_name($cpath)
+{
+  global $DB;
+
+  $tName = explode("/", $cpath);
+  $cid = $tName[1];
+  $cateName = get_categ_name($cid);
+
+  return $cateName;
 }
 
 
@@ -368,9 +413,6 @@ function user_enrolled_courses_report()
     $count_course = 0;
     $courses = get_all_course();
 
-
-
-
     if ($courses)
     {
         $table = new html_table();
@@ -381,25 +423,22 @@ function user_enrolled_courses_report()
                              get_string('count_of_selected_course', 'block_course_status_4_teacher'),
                              get_string('count_of_sel_cmpl_course', 'block_course_status_4_teacher'),
                              get_string('course_report', 'block_course_status_4_teacher'));
-        $table->size = array('5%', '10%', '15%', '50%', '10', '10', '10');
+        $table->size = array('5%', '10%', '15%', '40%', '10%', '10%', '20%');
         $table->width = "80%";
 
-        $table->align = array('center', 'left', 'left', 'left', 'center', 'center', 'left');
+        $table->align = array('center', 'left', 'left', 'left', 'center', 'center', 'center');
         $table->data = array();
         $i = 0;
 
 
         foreach ($courses as $course)
         {
-            $course_categ = $course->category;
-
-
-            error_log('test 01: ');
+            $cpath = get_categ_path($course->category);
 
             $row = array();
             $row[] = ++$i;
-            $row[] = module_name($course_categ-1);
-            $row[] = module_name($course_categ);
+            $row[] = venue_name($cpath);
+            $row[] = module_name($course->category);
             $row[] = "<a href=" . $CFG->wwwroot . "/course/view.php?id=" . $course->id . ">" . course_name($course->id) . "</a>";
             $row[] = get_count_of_selected_course($course->id);
             $row[] = get_count_of_sel_compl_course($course->id);
@@ -424,12 +463,7 @@ function user_enrolled_courses_report()
 function inprogress_courses_list_report($uid)
 {
     global $CFG;
-    // session_start();
-    // $courses = $_SESSION['$inprogress_course_list_row'];
     $courses = get_inprogress_courses($uid);
-
-    error_log(' -- inprogress courses: ' . print_r($courses, true));
-
 
     if ($courses)
     {
@@ -448,12 +482,13 @@ function inprogress_courses_list_report($uid)
 
         foreach ($courses as $course)
         {
-            $course_categ = $course[category];
+            $cpath = get_categ_path($course[category]);
+
 
             $row = array();
             $row[] = ++$i;
-            $row[] = module_name($course_categ-1);
-            $row[] = module_name($course_categ);
+            $row[] = venue_name($cpath);
+            $row[] = module_name($course[category]);
             $row[] = "<a href=" . $CFG->wwwroot . "/course/view.php?id=" . $course[id] . ">" . course_name($course[id]) . "</a>";
             $row[] = "<a href=" . $CFG->wwwroot . "/report/completion/index.php?course=" . $course[id] . ">" . '檢視報表' . "</a>";
             $table->data[] = $row;
@@ -704,7 +739,6 @@ function search_inprogress_course($inProgCourse, $complCourse)
 
     if (!empty($errors))
     {
-      error_log(' . comply course not empty');
       foreach ($inProgCourse as $theCourse => $tmpCourse)
       {
           foreach($complCourse as $theComplCourse => $tmpComplCourse)
@@ -718,7 +752,6 @@ function search_inprogress_course($inProgCourse, $complCourse)
     }
     else
     {
-        error_log(' . complCourse is empty');
         foreach ($inProgCourse as $theCourse => $tmpCourse)
         {
             $inProgCourseArr[] = $tmpCourse;

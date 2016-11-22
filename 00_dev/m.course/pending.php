@@ -35,8 +35,6 @@ require_once($CFG->libdir . '/adminlib.php');
 require_once($CFG->dirroot . '/course/lib.php');
 require_once($CFG->dirroot . '/course/request_form.php');
 
-
-
 require_login();
 require_capability('moodle/site:approvecourse', context_system::instance());
 
@@ -46,10 +44,10 @@ $reject = optional_param('reject', 0, PARAM_INT);
 $baseurl = $CFG->wwwroot . '/course/pending.php';
 admin_externalpage_setup('coursespending');
 
-
-
 // 初始化 moodle DB
 global $DB;
+global $USER;
+$uid = $USER->id;
 
 /// Process approval of a course.
 if (!empty($approve) and confirm_sesskey())
@@ -58,26 +56,22 @@ if (!empty($approve) and confirm_sesskey())
     $course = new course_request($approve);
     $courseid = $course->approve();
 
-
 // begin ----  將開課老師加入 role 2 --------//
+    $assignment_role_id = 3;
     $record1 = new stdClass();
-    $record1->roleid = 2;
+    $record1->roleid =  $assignment_role_id;
     $record1->contextid = 1;
     $record1->userid = $course->requester;
     $record1->timemodified = time();
-    $record1->modifierid = 2;
+    $record1->modifierid = $uid;
     $record1->sortorder = 0;
     $record1->itemid = 0;
     $records = array($record1);
 
     $lastinsertid = $DB->insert_records('role_assignments', $records);
-
-    error_log(' -.insert role 2: ');
+    error_log(' -.insert role: ', $assignment_role_id);
 
 // end ---------------------------------- //
-
-
-
 
     if ($courseid !== false)
     {

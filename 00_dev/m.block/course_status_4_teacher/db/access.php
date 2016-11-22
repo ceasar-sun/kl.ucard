@@ -12,39 +12,48 @@ $capabilities = array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => array(
-            'user' => CAP_ALLOW
-        ),
-         'legacy' => array(
-            'guest' => CAP_PREVENT,
-
-        ),
-
-        'clonepermissionsfrom' => 'moodle/my:manageblocks'
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
+        #),
+        # 'legacy' => array(
+            'student' => CAP_PREVENT,
+            'user' => CAP_PREVENT,
+            'guest' => CAP_PREVENT
+        )
+        #'clonepermissionsfrom' => 'moodle/my:manageblocks'
     ),
 
     'block/course_status_info:addinstance' => array(
         'riskbitmask' => RISK_SPAM | RISK_XSS,
-
         'captype' => 'write',
         'contextlevel' => CONTEXT_BLOCK,
         'archetypes' => array(
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW,
+            'coursecreator' => CAP_ALLOW,
+            'teacher' => CAP_ALLOW,
+            'manager'  => CAP_ALLOW,
             ),
         'legacy' => array(
-            'guest' => CAP_PREVENT,
-
+            'student' => CAP_PREVENT,
+            'user' => CAP_PREVENT,
+            'guest' => CAP_PREVENT
         ),
         'clonepermissionsfrom' => 'moodle/site:manageblocks'
     ),
         'block/course_status_info:view' => array(
         'captype' => 'read',
-        'contextlevel' => CONTEXT_COURSE,
+        'contextlevel' => CONTEXT_BLOCK,
         'archetypes' => array(
-
-            'guest'        => CAP_PREVENT
-
-            ),
-
+            'editingteacher' => CAP_ALLOW,
+            'coursecreator' => CAP_ALLOW,
+            'teacher' => CAP_ALLOW,
+            'manager'  => CAP_ALLOW,
+	    ),
+        'legacy' => array(
+            'student' => CAP_PREVENT,
+            'user' => CAP_PREVENT,
+            'guest' => CAP_PREVENT
         ),
+        'clonepermissionsfrom' => 'moodle/site:manageblocks'
+    ),
 );

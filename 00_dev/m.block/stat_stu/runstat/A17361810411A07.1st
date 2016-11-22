@@ -1,0 +1,16 @@
+<table class='gmisc_table' style='border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;' >
+<thead>
+<tr>
+<th style='border-left: 2px solid grey;border-right: 2px solid grey;border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;'>1st Quartile</th>
+<th style='border-left: 2px solid grey;border-right: 2px solid grey;border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;'>2nd Quartile</th>
+<th style='border-left: 2px solid grey;border-right: 2px solid grey;border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;'>3rd Quartile</th>
+<th style='border-left: 2px solid grey;border-right: 2px solid grey;border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;'>4th Quartile</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style='border-left: 2px solid grey;border-right: 2px solid grey;border-bottom: 2px solid grey; text-align: center;'>92.15 A</td>
+<td style='border-left: 2px solid grey;border-right: 2px solid grey;border-bottom: 2px solid grey; text-align: center;'>93.87 B</td>
+<td style='border-left: 2px solid grey;border-right: 2px solid grey;border-bottom: 2px solid grey; text-align: center;'>95.33 C</td>
+<td style='border-left: 2px solid grey;border-right: 2px solid grey;border-bottom: 2px solid grey; text-align: center;'>99.33 D</td>
+</tr>

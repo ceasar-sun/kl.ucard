@@ -69,7 +69,7 @@ class block_course_status_4_teacher extends block_base
 
 
 
-            error_log(' -- block test v.146 -- ');
+            error_log(' -- block test v.154 -- ');
 
 
 

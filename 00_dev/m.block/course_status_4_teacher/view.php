@@ -6,13 +6,19 @@
  * @author: Jonathan Lin
  */
 
-require_once('../../config.php');
+#require_once('../../config.php');
+require_once(dirname(__FILE__) . '/../../config.php');
 require_once('course_form.php');
-// require_once('lib.php');
-require_once($CFG->dirroot.'/blocks/course_status_4_teacher/lib.php');
+require_once('lib.php');
+#require_once($CFG->dirroot.'/blocks/course_status_4_teacher/lib.php');
+
+$site = get_site();
 require_login();
-global $DB, $OUTPUT, $PAGE, $CFG, $USER;
 $context = context_system::instance();
+require_capability('block/course_status_info:addinstance', $context);
+#require_capability('block/course_status_info:view', $context);
+
+global $DB, $OUTPUT, $PAGE, $CFG, $USER;
 $viewpage = required_param('viewpage', PARAM_INT);
 $inpgr_uid = required_param('param', PARAM_INT);
 $PAGE->set_context($context);
