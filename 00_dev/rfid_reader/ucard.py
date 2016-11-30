@@ -34,7 +34,7 @@ class Handler:
 	    return
 	if event.keyval == 65293:
 	    print keydata
-	    self.testinput(keydata)
+	    self.testinput(keydata.upper())
 	    return
 	keydata=keydata+keyname
 
@@ -160,6 +160,7 @@ class UpdateData():
 	    self.running_labels()
             try:
                 url = "%s/ucard1.php?rfid_key16=%s&location=%s" % (Ucard_url, Ustatus['id'], self.locationid)
+		if debug: print url
                 r = requests.get(url)
                 moodle_data_st = json.loads(r.text)
                 if moodle_data_st['status'] == '1':

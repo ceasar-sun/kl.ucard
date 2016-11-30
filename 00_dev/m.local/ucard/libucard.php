@@ -247,7 +247,7 @@ class UCard {
     }
 
     public function getID($rfid_key16){
-	$query = "select idno from semester_student where rfid_key16=\"$rfid_key16\"";
+	$query = "select idno from semester_student where upper(rfid_key16)=\"$rfid_key16\"";
 	$data = $this->executeSQL($query);
 	if ($data != false){
 	    return $data[0]['idno'];
@@ -295,7 +295,7 @@ class UCard {
     }
 
     public function getRFIDKeyOut($rfid_key16){
-	$query = "select * from semester_student where rfid_key16=\"$rfid_key16\"";
+	$query = "select * from semester_student where upper(rfid_key16)=\"$rfid_key16\"";
 	$data = $this->executeSQL($query);
 	if ($data != false){
 	    return $data[0]['rfid_keyout'];
