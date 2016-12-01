@@ -247,7 +247,7 @@ class UCard {
     }
 
     public function getID($rfid_key16){
-	$query = "select idno from semester_student where rfid_key16=\"$rfid_key16\"";
+	$query = "select idno from semester_student where upper(rfid_key16)=\"$rfid_key16\"";
 	$data = $this->executeSQL($query);
 	if ($data != false){
 	    return $data[0]['idno'];
@@ -295,7 +295,7 @@ class UCard {
     }
 
     public function getRFIDKeyOut($rfid_key16){
-	$query = "select * from semester_student where rfid_key16=\"$rfid_key16\"";
+	$query = "select * from semester_student where upper(rfid_key16)=\"$rfid_key16\"";
 	$data = $this->executeSQL($query);
 	if ($data != false){
 	    return $data[0]['rfid_keyout'];
@@ -509,5 +509,19 @@ class UCard {
 	return $newcourseid;
 
     }
+
+    public function getLocationID($location){
+	$search_name["key"]="name";
+	$search_name["value"]=$location;
+	$search_parent["key"]="parent";
+	$search_parent["value"]="0";
+	$params = array(array($search_name, $search_parent),'0'); 
+
+	$api='core_course_get_categories';
+	$response = $this->executeMoodleAPI($api, $params);
+
+	return $response[0]['id'];
+    }
+
 }
 ?>

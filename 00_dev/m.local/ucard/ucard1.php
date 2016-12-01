@@ -38,6 +38,9 @@ if ($sid != NULL){
 }
 
 if ($level == NULL){
+    if ($debug == 1){
+	echo "sid:$sid, rfid_keyout:$rfid_keyout, level:$level\n";
+    }
     $status=0;
 }
 if($status === 0 ){

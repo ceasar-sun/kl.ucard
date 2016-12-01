@@ -2,10 +2,12 @@
 $token = '851fc9fb3410e174ff156b65689f6922';
 $server = 'http://moodle.nchc.org.tw';
 $dir = '/moodle'; // May be null if moodle runs in the root directory in the server.
-$search["key"]="id";
-$search["value"]="4";
-$params = array(array($search));
-$params = array();
+$search_name["key"]="name";
+$search_name["value"]="海科管";
+$search_parent["key"]="parent";
+$search_parent["value"]="0";
+$params = array(array($search_name, $search_parent),'0');
+#$params = array();
 var_dump($params);
 $request = xmlrpc_encode_request('core_course_get_categories', $params, array('encoding'=>'UTF-8'));
 

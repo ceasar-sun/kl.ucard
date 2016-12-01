@@ -9,16 +9,43 @@ import ucardreader
 import requests
 import json
 import textwrap
+import urllib
 from qrcode import *
 
 # debug
 debug=1
 
+displaysec=5
+keydata=""
 Udata={}
-Ustatus={'device':'no', 'card':'no', 'id':'no', 'oid':'no'}
+Ustatus={'device':'no', 'card':'no', 'id':'no', 'oid':'no', 'time':0}
 Ulbs={}
-Uconf={'locationid':1, 'location_name':"海生館"}
-Ucard_url="http://learning.kl.edu.tw/moodle/local/ucard"
+Uconf={'locationid':0, 'location_name':"尚未連線"}
+#Ucard_url="http://learning.kl.edu.tw/moodle/local/ucard"
+Ucard_url="http://moodle.nchc.org.tw/moodle/local/ucard"
+
+class Handler:
+    def key(self, widget, event):
+	global keydata
+	keyname = Gdk.keyval_name(event.keyval)
+	print "Key %s (%d) was pressed" % (keyname, event.keyval)
+	if event.keyval >= 65294:
+	    Ustatus={'device':'no', 'card':'no', 'id':'no', 'oid':'no', 'time':0}
+	    return
+	if event.keyval == 65293:
+	    print keydata
+	    self.testinput(keydata.upper())
+	    return
+	keydata=keydata+keyname
+
+    def testinput(self, entry_text):
+	global Ustatus
+	global keydata
+        print "Entry contents: %s\n" % entry_text
+	Ustatus={'device':'yes', 'card':'yes', 'id':entry_text, 'oid':'no', 'time':0}
+	keydata=''
+
+
 
 class readucarddata(threading.Thread):
 
@@ -38,11 +65,11 @@ class readucarddata(threading.Thread):
                     Ustatus['device'] == 'yes'
                 self.rfid_key16 = rfid.read()
 		if self.rfid_key16 == False:
-		    Ustatus={'device':'no', 'card':'no', 'id':'no', 'oid':'no'}
+		    Ustatus={'device':'no', 'card':'no', 'id':'no', 'oid':'no', 'time':0}
 		else:
-		    Ustatus={'device':'yes', 'card':'yes', 'id':self.rfid_key16, 'oid':'no'}
+		    Ustatus={'device':'yes', 'card':'yes', 'id':self.rfid_key16, 'oid':'no', 'time':0}
             except:
-		Ustatus={'device':'no', 'card':'no', 'id':'no', 'oid':'no'}
+		Ustatus={'device':'no', 'card':'no', 'id':'no', 'oid':'no', 'time':0}
 		Udata={}
                 continue
 
@@ -53,6 +80,9 @@ class UpdateData():
 	#threading.Thread.__init__(self)
 	self.lbs = Ulbs
 	self.locationid=Uconf['locationid']
+        if self.locationid == 0:
+            read_location()
+            self.lbs['location'].set_text(Uconf['location_name'])
 	self.run()
 
     def run(self):
@@ -111,9 +141,16 @@ class UpdateData():
 
 	global Udata
 	global Ustatus
+	global displaysec
 	if Ustatus['card'] == "no":
 	    if debug: print "no card"
 	    Udata={}
+	    self.clear_labels()
+	    return False
+	elif Ustatus['time'] != 0 and time.time() - Ustatus['time'] >= displaysec:
+	    if debug: print "card removed"
+	    Udata={}
+	    Ustatus={'device':'no', 'card':'no', 'id':'no', 'oid':'no', 'time':0}
 	    self.clear_labels()
 	    return False
 	elif Ustatus['id'] == Ustatus['oid']:
@@ -123,6 +160,7 @@ class UpdateData():
 	    self.running_labels()
             try:
                 url = "%s/ucard1.php?rfid_key16=%s&location=%s" % (Ucard_url, Ustatus['id'], self.locationid)
+		if debug: print url
                 r = requests.get(url)
                 moodle_data_st = json.loads(r.text)
                 if moodle_data_st['status'] == '1':
@@ -133,8 +171,10 @@ class UpdateData():
                     rfid_keyout = moodle_data['rfid_keyout']
                     name = moodle_data['name']
 		    Ustatus['oid'] = Ustatus['id']
+		    Ustatus['time'] = time.time()
                 else:
 	            self.error_labels('moodle 資料錯誤')
+		    Ustatus={'device':'no', 'card':'no', 'id':'no', 'oid':'no', 'time':0}
 		    return False
             except:
 		self.error_labels('網路異常')
@@ -159,8 +199,34 @@ class UpdateData():
 	Udata = udata
 	return True
 
+def read_location():
+    f = open('/boot/location', 'r')
+    location_str = f.read()
+    location_str = location_str.rstrip()
+    url = "%s/location.php?location=%s" % (Ucard_url, urllib.quote(location_str))
+    location_id = ''
+    try:
+	r = requests.get(url)
+	location_id = r.text
+	if debug: print "response = %s" % (r)
+    except:
+	location_id = ''
+	if debug: print "requests.get url fail"
+
+    if location_id != '':
+        global Uconf
+        Uconf={'locationid':location_id, 'location_name':location_str}
+    else:
+	time.sleep(2)
+        Uconf={'locationid':0, 'location_name':"連線定位失敗"}
+	if debug: print "location in text = %s" % (location_str)
+	if debug: print "location in url = %s" % (url)
+    
+
+read_location()
 builder = Gtk.Builder()
 builder.add_from_file("icon/kl-kiosk-ui.glade")
+builder.connect_signals(Handler())
 
 window = builder.get_object("Xwin")
 lname = builder.get_object("name")
@@ -182,8 +248,8 @@ window.show_all()
 #thrUpdate.daemon = True
 #thrUpdate.start()
 
-thrReader = readucarddata()
-thrReader.daemon = True
-thrReader.start()
+#thrReader = readucarddata()
+#thrReader.daemon = True
+#thrReader.start()
 
 Gtk.main()

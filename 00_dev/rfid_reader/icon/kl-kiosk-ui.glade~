@@ -362,7 +362,7 @@
                     <property name="label" translatable="yes">更多資訊請參考 http://learning.kl.edu.tw/ 
 或手機掃描 QR Code </property>
                     <attributes>
-                      <attribute name="font-desc" value="&lt;Enter Value&gt; 8"/>
+                      <attribute name="font-desc" value="&lt;Enter Value&gt; 10"/>
                     </attributes>
                   </object>
                   <packing>
