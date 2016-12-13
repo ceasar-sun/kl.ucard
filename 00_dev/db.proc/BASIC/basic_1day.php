@@ -77,6 +77,9 @@ else{
 
     } //foreach
 
+    $cmd3="/bin/rm /home/shan/alle/BASIC/BASIC.$file_date.zip /home/shan/alle/BASIC/BASIC.$file_date.json";
+    shell_exec($cmd3);
+
     //close connection
     mysqli_close($con);
 ?>
