@@ -511,17 +511,18 @@ class UCard {
     }
 
     public function getLocationID($location){
-	$search_name["key"]="name";
-	$search_name["value"]=$location;
-	$search_parent["key"]="parent";
-	$search_parent["value"]="0";
-	$params = array(array($search_name, $search_parent),'0'); 
+        $params = array();
 
-	$api='core_course_get_categories';
-	$response = $this->executeMoodleAPI($api, $params);
-
-	return $response[0]['id'];
+        $api='core_course_get_categories';
+        $response = $this->executeMoodleAPI($api, $params);
+        #var_dump($response);
+        for ($i = 0; $i < count($response); $i++){
+            $name=$response[$i]['name'];
+            $parent=$response[$i]['parent'];
+            if (($parent == "0") && ($name == $location)){
+                return $response[$i]['id'];
+            }
+        }
     }
-
 }
 ?>
