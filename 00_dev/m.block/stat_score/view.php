@@ -44,7 +44,7 @@ echo $OUTPUT->skip_link_target();
      include "db.php";
      $SCHName=array();
      $mysqli = new mysqli($IP, $dbuser, $dbpasswd, $dbname);
-     $result = $mysqli->query("SELECT * FROM `semester_schno` WHERE `schclass` = '國小' ORDER BY `schclass` DESC");
+     $result = $mysqli->query("SELECT * FROM `semester_schno` WHERE `schclass` = '國小' AND `schname` = '深美國小' ORDER BY `schclass` DESC");
      while ($row = $result->fetch_assoc()) {
         $SCHName[$row["schno"]]=$row["schname"];
      }
@@ -120,16 +120,18 @@ echo $OUTPUT->skip_link_target();
     $ScoreList=array();
     
     echo '<table style="border:1px solid #cccccc; border-collapse:collapse;">';
-    echo '<tr><th style="border:1px solid #cccccc; color:#ffffff;background-color:#aaaacc; " >評語</th><th style="border:1px solid #cccccc; color:#ffffff;background-color:#aaaacc;">&nbsp;&nbsp;98&nbsp;&nbsp;</th><th style="border:1px solid #cccccc; color:#ffffff;background-color:#aaaacc;">&nbsp;&nbsp;88&nbsp;&nbsp;</th><th style="border:1px solid #cccccc;color:#ffffff;background-color:#aaaacc;">&nbsp;&nbsp;78&nbsp;&nbsp;</th><th style="border:1px solid #cccccc;color:#ffffff;background-color:#aaaacc;">&nbsp;&nbsp;68&nbsp;&nbsp;</th><th style="border:1px solid #cccccc;color:#ffffff;background-color:#aaaacc;">&nbsp;&nbsp;58&nbsp;&nbsp;</th></tr>';
+    echo '<tr><th style="border:1px solid #cccccc; color:#ffffff;background-color:#aaaacc; " >評語</th><th style="border:1px solid #cccccc; color:#ffffff;background-color:#aaaacc;">&nbsp;&nbsp;表現優異&nbsp;&nbsp;</th><th style="border:1px solid #cccccc; color:#ffffff;background-color:#aaaacc;">&nbsp;&nbsp;表現良好&nbsp;&nbsp;</th><th style="border:1px solid #cccccc;color:#ffffff;background-color:#aaaacc;">&nbsp;&nbsp;已經做到&nbsp;&nbsp;</th><th style="border:1px solid #cccccc;color:#ffffff;background-color:#aaaacc;">&nbsp;&nbsp;還要加油&nbsp;&nbsp;</th><th style="border:1px solid #cccccc;color:#ffffff;background-color:#aaaacc;">&nbsp;&nbsp;努力改進&nbsp;&nbsp;</th></tr>';
     foreach ( $ValueList as $key => $ValueItems){
         $result = $mysqli->query("SELECT `score` FROM `semester_setgrp` WHERE `schno` = '173641' AND `stdyear` = '".$grade."' AND `semester` = '".$academic_year.$semester."' AND `subno` LIKE '%".$course_stat."%' AND `value` = '".$ValueItems."'");
         $ScoreSum=array();
+        $TotalSum=0;
         while ($row = $result->fetch_assoc()) {
             if ( isset($ScoreSum[$row["score"]]) ){
                $ScoreSum[$row["score"]]++;
             }else{
                $ScoreSum[$row["score"]]=1;
             }
+            $TotalSum++;
         }
         echo '<tr>';
         echo '<td style="border:1px solid #cccccc; background-color:#3377cc; color:#ffffff;text-align:left;line-height:28px;">'.$ValueItems.'</td>';
@@ -137,7 +139,7 @@ echo $OUTPUT->skip_link_target();
         $ScoreList[$key]=$ScoreSum;
         $count=0;
         foreach($ScoreSum as $ScoreValue => $ScoreCount){
-           echo '<td style="border:1px solid #cccccc;text-align:center;">'.$ScoreCount.'</td>';
+           echo '<td style="border:1px solid #cccccc;text-align:center;">'.round((($ScoreCount/$TotalSum)*100),2).'%</td>';
            $count++;
         }
         if ( $count == 4){

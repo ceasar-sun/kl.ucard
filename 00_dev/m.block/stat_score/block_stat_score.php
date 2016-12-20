@@ -52,7 +52,7 @@ class block_stat_score extends block_base {
         include "db.php";
         $SCHName=array();
         $mysqli = new mysqli($IP, $dbuser, $dbpasswd, $dbname);
-        $result = $mysqli->query("SELECT * FROM `semester_schno` WHERE `schclass` = '國小' ORDER BY `schclass` DESC");
+        $result = $mysqli->query("SELECT * FROM `semester_schno` WHERE `schclass` = '國小' AND `schname`='深美國小' ORDER BY `schclass` DESC");
         while ($row = $result->fetch_assoc()) {
            $SCHName[$row["schno"]]=$row["schname"];
         }
@@ -68,7 +68,7 @@ class block_stat_score extends block_base {
         $this->content->text  = '<div class="searchform">';
         $this->content->text .= '<form action="'.$CFG->wwwroot.'/blocks/stat_score/view.php" style="display:inline">';
         $this->content->text .= '<select name="schno" id="schno" style="display:inline"/>';
-        $this->content->text .= '<option value="ALL">所有國小</option>';
+        //$this->content->text .= '<option value="ALL">所有國小</option>';
         foreach( $SCHName as $SCHKey => $SCHValue){
            $this->content->text .= '<option value="'.$SCHKey.'">'.$SCHValue.'</option>';
         }
