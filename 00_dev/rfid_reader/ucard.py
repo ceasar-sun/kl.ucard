@@ -10,6 +10,7 @@ import requests
 import json
 import textwrap
 import urllib
+import codecs
 from qrcode import *
 
 # debug
@@ -21,8 +22,8 @@ Udata={}
 Ustatus={'device':'no', 'card':'no', 'id':'no', 'oid':'no', 'time':0}
 Ulbs={}
 Uconf={'locationid':0, 'location_name':"尚未連線"}
-#Ucard_url="http://learning.kl.edu.tw/moodle/local/ucard"
-Ucard_url="http://moodle.nchc.org.tw/moodle/local/ucard"
+Ucard_url="https://learning.kl.edu.tw/moodle/local/ucard"
+#Ucard_url="http://moodle.nchc.org.tw/moodle/local/ucard"
 
 class Handler:
     def key(self, widget, event):
@@ -200,10 +201,15 @@ class UpdateData():
 	return True
 
 def read_location():
-    f = open('/boot/location', 'r')
+    #f = codecs.open("test", "r", "utf-8")
+    f = codecs.open('/boot/location', 'r', "utf-8-sig")
     location_str = f.read()
+    
     location_str = location_str.rstrip()
-    url = "%s/location.php?location=%s" % (Ucard_url, urllib.quote(location_str))
+
+    url_location_str = urllib.quote(location_str.encode('utf-8'))
+    #url = "%s/location.php?location=%s" % (Ucard_url, location_str)
+    url = "%s/location.php?location=%s" % (Ucard_url, url_location_str)
     location_id = ''
     try:
 	r = requests.get(url)
@@ -218,7 +224,7 @@ def read_location():
         Uconf={'locationid':location_id, 'location_name':location_str}
     else:
 	time.sleep(2)
-        Uconf={'locationid':0, 'location_name':"連線定位失敗"}
+        Uconf={'locationid':0, 'location_name':location_str.encode('utf-8')+"連線定位失敗"}
 	if debug: print "location in text = %s" % (location_str)
 	if debug: print "location in url = %s" % (url)
     
