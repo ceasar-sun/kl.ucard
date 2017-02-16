@@ -10,6 +10,7 @@ import requests
 import json
 import textwrap
 import urllib
+import codecs
 from qrcode import *
 
 # debug
@@ -21,8 +22,8 @@ Udata={}
 Ustatus={'device':'no', 'card':'no', 'id':'no', 'oid':'no', 'time':0}
 Ulbs={}
 Uconf={'locationid':0, 'location_name':"尚未連線"}
-#Ucard_url="http://learning.kl.edu.tw/moodle/local/ucard"
-Ucard_url="http://moodle.nchc.org.tw/moodle/local/ucard"
+Ucard_url="https://learning.kl.edu.tw/moodle/local/ucard"
+#Ucard_url="http://moodle.nchc.org.tw/moodle/local/ucard"
 
 class Handler:
     def key(self, widget, event):
@@ -115,6 +116,7 @@ class UpdateData():
 	self.lbs['info'].set_text("\n請放置卡片以查詢課程進度")
 	self.lbs['sid'].set_text("")
 	self.lbs['cid'].set_text("")
+	self.lbs['coursetb'].clear()
 	path="icon/moodle.qr.png"
 	self.lbs['qrcode'].set_from_file(path)
 
@@ -126,6 +128,19 @@ class UpdateData():
 	self.lbs['date'].set_text(Udata['date'])
 	self.lbs['time'].set_text(Udata['time'])
 	self.lbs['info'].set_text(Udata['course'])
+
+	coursestorest = Udata['liststore']
+	list_store = self.lbs['coursetb']
+	for i in range(len(coursestorest)):
+	    if i%2 == 1:
+		coursestorest[i].append("#FF0000")
+		coursestorest[i].append("#C9C9C9")
+	    else:
+		coursestorest[i].append("#FF0000")
+		coursestorest[i].append("#FFFFFF")
+	    print coursestorest[i]
+	    list_store.append(coursestorest[i])
+
 	qrtext="%s/student_courses.php?moodleid=%s/" % (Ucard_url, Udata['moodleid'])
         path="/tmp/qrcode.png"
         qr = QRCode(version=1, error_correction=ERROR_CORRECT_L, box_size=2, border=0)
@@ -186,24 +201,32 @@ class UpdateData():
         cdate = time.strftime('%Y/%m/%d')
         location = Uconf['location_name']
 	course_label_mesg=""
+	coursestore=[]
 	for coursename in moodle_course:
 	    if coursename != '':
 		cmesg = u'進行中'
 		if moodle_course[coursename] == 'YES' :
 		    cmesg = u'完成'
-		coursemesg = u"課程 %s, %s\n" % (coursename, cmesg)
-                dedented_mesg = textwrap.dedent(coursemesg)
-                wrap_coursemesg = textwrap.fill(dedented_mesg, width=22)
-		course_label_mesg = course_label_mesg+"\n"+wrap_coursemesg
-        udata={'name':name, 'moodleid':moodleid, 'sid':sid, 'location':location, 'rfid_keyout':rfid_keyout, 'time':ctime, 'date':cdate, 'course':course_label_mesg}
+		coursestore.append([coursename, cmesg])
+		course_label_mesg = ''
+		#coursemesg = u"課程 %s, %s\n" % (coursename, cmesg)
+                #dedented_mesg = textwrap.dedent(coursemesg)
+                #wrap_coursemesg = textwrap.fill(dedented_mesg, width=22)
+		#course_label_mesg = course_label_mesg+"\n"+wrap_coursemesg
+	udata={'name':name, 'moodleid':moodleid, 'sid':sid, 'location':location, 'rfid_keyout':rfid_keyout, 'time':ctime, 'date':cdate, 'course':course_label_mesg, 'liststore':coursestore}
 	Udata = udata
 	return True
 
 def read_location():
-    f = open('/boot/location', 'r')
+    #f = codecs.open("test", "r", "utf-8")
+    f = codecs.open('/boot/location', 'r', "utf-8-sig")
     location_str = f.read()
+    
     location_str = location_str.rstrip()
-    url = "%s/location.php?location=%s" % (Ucard_url, urllib.quote(location_str))
+
+    url_location_str = urllib.quote(location_str.encode('utf-8'))
+    #url = "%s/location.php?location=%s" % (Ucard_url, location_str)
+    url = "%s/location.php?location=%s" % (Ucard_url, url_location_str)
     location_id = ''
     try:
 	r = requests.get(url)
@@ -218,7 +241,7 @@ def read_location():
         Uconf={'locationid':location_id, 'location_name':location_str}
     else:
 	time.sleep(2)
-        Uconf={'locationid':0, 'location_name':"連線定位失敗"}
+        Uconf={'locationid':0, 'location_name':location_str.encode('utf-8')+"連線定位失敗"}
 	if debug: print "location in text = %s" % (location_str)
 	if debug: print "location in url = %s" % (url)
     
@@ -237,7 +260,9 @@ ldate = builder.get_object("date")
 ltime = builder.get_object("time")
 llocation = builder.get_object("location")
 lqrcode = builder.get_object("Icode")
-lbs = {'name':lname, 'info':linfo, 'sid':lsid, 'cid':lcid, 'date':ldate, 'time':ltime, 'qrcode':lqrcode, 'location':llocation}
+llisttb=builder.get_object("coursetb")
+lviewtb=builder.get_object("viewtb")
+lbs = {'name':lname, 'info':linfo, 'sid':lsid, 'cid':lcid, 'date':ldate, 'time':ltime, 'qrcode':lqrcode, 'location':llocation, 'coursetb':llisttb, 'viewtb':lviewtb}
 Ulbs=lbs
 window.connect("delete-event", Gtk.main_quit)
 GObject.timeout_add_seconds(2, UpdateData, lbs)
