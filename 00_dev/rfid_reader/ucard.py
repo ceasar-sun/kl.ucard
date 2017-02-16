@@ -127,6 +127,12 @@ class UpdateData():
 	self.lbs['date'].set_text(Udata['date'])
 	self.lbs['time'].set_text(Udata['time'])
 	self.lbs['info'].set_text(Udata['course'])
+
+	coursestorest = Udata['liststore']
+	list_store = self.lbs['coursetb']
+	for i in range(len(coursestorest)):
+	    list_store.append(coursestorest[i])
+
 	qrtext="%s/student_courses.php?moodleid=%s/" % (Ucard_url, Udata['moodleid'])
         path="/tmp/qrcode.png"
         qr = QRCode(version=1, error_correction=ERROR_CORRECT_L, box_size=2, border=0)
@@ -187,16 +193,19 @@ class UpdateData():
         cdate = time.strftime('%Y/%m/%d')
         location = Uconf['location_name']
 	course_label_mesg=""
+	coursestore=[]
 	for coursename in moodle_course:
 	    if coursename != '':
 		cmesg = u'進行中'
 		if moodle_course[coursename] == 'YES' :
 		    cmesg = u'完成'
-		coursemesg = u"課程 %s, %s\n" % (coursename, cmesg)
-                dedented_mesg = textwrap.dedent(coursemesg)
-                wrap_coursemesg = textwrap.fill(dedented_mesg, width=22)
-		course_label_mesg = course_label_mesg+"\n"+wrap_coursemesg
-        udata={'name':name, 'moodleid':moodleid, 'sid':sid, 'location':location, 'rfid_keyout':rfid_keyout, 'time':ctime, 'date':cdate, 'course':course_label_mesg}
+		coursestore.append([coursename, cmesg])
+		#coursemesg = u"課程 %s, %s\n" % (coursename, cmesg)
+                #dedented_mesg = textwrap.dedent(coursemesg)
+                #wrap_coursemesg = textwrap.fill(dedented_mesg, width=22)
+		#course_label_mesg = course_label_mesg+"\n"+wrap_coursemesg
+		course_label_mesg = ''
+	udata={'name':name, 'moodleid':moodleid, 'sid':sid, 'location':location, 'rfid_keyout':rfid_keyout, 'time':ctime, 'date':cdate, 'course':course_label_mesg, 'liststore':coursestore}
 	Udata = udata
 	return True
 
@@ -243,7 +252,9 @@ ldate = builder.get_object("date")
 ltime = builder.get_object("time")
 llocation = builder.get_object("location")
 lqrcode = builder.get_object("Icode")
-lbs = {'name':lname, 'info':linfo, 'sid':lsid, 'cid':lcid, 'date':ldate, 'time':ltime, 'qrcode':lqrcode, 'location':llocation}
+llisttb=builder.get_object("coursetb")
+lviewtb=builder.get_object("viewtb")
+lbs = {'name':lname, 'info':linfo, 'sid':lsid, 'cid':lcid, 'date':ldate, 'time':ltime, 'qrcode':lqrcode, 'location':llocation, 'coursetb':llisttb, 'viewtb':lviewtb}
 Ulbs=lbs
 window.connect("delete-event", Gtk.main_quit)
 GObject.timeout_add_seconds(2, UpdateData, lbs)
