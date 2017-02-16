@@ -13,7 +13,7 @@
     <property name="decorated">False</property>
     <property name="startup_id">Xwin</property>
     <child>
-      <object class="GtkGrid">
+      <object class="GtkGrid" id='gridid'>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
@@ -71,7 +71,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id='courseInfo'>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">課程資訊</property>
