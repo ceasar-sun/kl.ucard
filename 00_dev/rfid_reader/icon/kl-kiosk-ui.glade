@@ -8,6 +8,10 @@
       <column type="gchararray"/>
       <!-- column-name st -->
       <column type="gchararray"/>
+      <!-- column-name fg -->
+      <column type="gchararray"/>
+      <!-- column-name bg -->
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkWindow" id="Xwin">
@@ -95,14 +99,13 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
                     <property name="xalign">0.10000000149011612</property>
                     <property name="yalign">0</property>
                     <property name="label" translatable="yes">課程進度查尋課程資訊課程資訊課</property>
                     <property name="width_chars">0</property>
                     <property name="max_width_chars">0</property>
                     <attributes>
-                      <attribute name="font-desc" value="&lt;Enter Value&gt; 16"/>
+                      <attribute name="font-desc" value="&lt;Enter Value&gt; 14"/>
                     </attributes>
                   </object>
                   <packing>
@@ -113,22 +116,30 @@
                 <child>
                   <object class="GtkTreeView" id="viewtb">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
                     <property name="model">coursetb</property>
                     <property name="headers_clickable">False</property>
                     <property name="enable_search">False</property>
                     <property name="show_expanders">False</property>
                     <property name="level_indentation">1</property>
-                    <property name="enable_grid_lines">both</property>
+                    <property name="enable_grid_lines">horizontal</property>
                     <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="treeview-selection1"/>
+                      <object class="GtkTreeSelection" id="treeview-selection1">
+                        <property name="mode">none</property>
+                      </object>
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                         <property name="title" translatable="yes">課程</property>
+                        <property name="expand">True</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertext1"/>
                           <attributes>
+                            <attribute name="background">3</attribute>
+                            <attribute name="foreground">2</attribute>
+                            <attribute name="size">14</attribute>
                             <attribute name="text">0</attribute>
                           </attributes>
                         </child>
@@ -140,6 +151,9 @@
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertext2"/>
                           <attributes>
+                            <attribute name="background">3</attribute>
+                            <attribute name="foreground">2</attribute>
+                            <attribute name="size">14</attribute>
                             <attribute name="text">1</attribute>
                           </attributes>
                         </child>
@@ -277,13 +291,37 @@
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <object class="GtkImage" id="Iname">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="pixbuf">name.png</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <object class="GtkImage" id="Icid">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="pixbuf">cid.png</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                  </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <object class="GtkImage" id="Itime">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="pixbuf">time.png</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                  </packing>
                 </child>
               </object>
               <packing>

@@ -116,6 +116,7 @@ class UpdateData():
 	self.lbs['info'].set_text("\n請放置卡片以查詢課程進度")
 	self.lbs['sid'].set_text("")
 	self.lbs['cid'].set_text("")
+	self.lbs['coursetb'].clear()
 	path="icon/moodle.qr.png"
 	self.lbs['qrcode'].set_from_file(path)
 
@@ -131,6 +132,13 @@ class UpdateData():
 	coursestorest = Udata['liststore']
 	list_store = self.lbs['coursetb']
 	for i in range(len(coursestorest)):
+	    if i%2 == 1:
+		coursestorest[i].append("#FF0000")
+		coursestorest[i].append("#C9C9C9")
+	    else:
+		coursestorest[i].append("#FF0000")
+		coursestorest[i].append("#FFFFFF")
+	    print coursestorest[i]
 	    list_store.append(coursestorest[i])
 
 	qrtext="%s/student_courses.php?moodleid=%s/" % (Ucard_url, Udata['moodleid'])
@@ -200,11 +208,11 @@ class UpdateData():
 		if moodle_course[coursename] == 'YES' :
 		    cmesg = u'完成'
 		coursestore.append([coursename, cmesg])
+		course_label_mesg = ''
 		#coursemesg = u"課程 %s, %s\n" % (coursename, cmesg)
                 #dedented_mesg = textwrap.dedent(coursemesg)
                 #wrap_coursemesg = textwrap.fill(dedented_mesg, width=22)
 		#course_label_mesg = course_label_mesg+"\n"+wrap_coursemesg
-		course_label_mesg = ''
 	udata={'name':name, 'moodleid':moodleid, 'sid':sid, 'location':location, 'rfid_keyout':rfid_keyout, 'time':ctime, 'date':cdate, 'course':course_label_mesg, 'liststore':coursestore}
 	Udata = udata
 	return True
