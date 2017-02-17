@@ -284,10 +284,34 @@ class UCard {
     }
 
     public function getStudentLevel($idno){
-	$query = "SELECT max(stdyear) as stdyer FROM semester_score WHERE idno=\"$idno\"";
-	$data = $this->executeSQL($query);
-	if ($data != false){
-	    return $data[0]['stdyer'];
+        $query = "SELECT stdyear, semester FROM semester_score where idno = \"$idno\" ORDER BY semester DESC limit 1";
+        $data = $this->executeSQL($query);
+        if ($data != false){
+            // StudentLevel and StudentSemester from DB 
+            $StudentLevel = $data[0]['stdyear'];
+            $StudentSemester = $data[0]['semester'];
+
+            $x = strlen($StudentSemester);
+            $x = $x-1;  
+            $sYear = substr($StudentSemester, 0, $x);
+            $sMonth = substr($StudentSemester, $x, 1);
+ 
+            // current stdyear 
+            $cYear = date("Y"); 
+            $cYear = $cYear - 1911; 
+            $cMonth = date("n"); 
+            if ($cMonth < 8){ 
+                $Xstdyear = $cYear-1; 
+            } else{ 
+                $Xstdyear = $cYear; 
+            } 
+             
+            // fix StudentLevel 
+            $fixStdyear = $Xstdyear-$sYear;             
+            $StudentLevel = $StudentLevel+$fixStdyear;   
+ 
+            return $StudentLevel; 
+
 	}else{
 	    return null;
 	}
@@ -473,7 +497,8 @@ class UCard {
 	$params = array(array('ids'=>array($courseid)));
 	$api='core_course_get_courses';
 	$response = $this->executeMoodleAPI($api, $params);
-	$name = $response[0]['fullname']."-".$response[0]['shortname'];
+	//$name = $response[0]['fullname']."-".$response[0]['shortname'];
+	$name = $response[0]['fullname'];
 
 	return $name;
     }
