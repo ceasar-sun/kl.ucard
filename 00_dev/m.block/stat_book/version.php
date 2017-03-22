@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @Func:	stat_stu version information 
+ * @Func:	stat_book version information 
  * @License:    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @Author:     Serena Pan, Ceasar Sun
  * @Note:       2016/07/27

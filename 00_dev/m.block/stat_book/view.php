@@ -35,7 +35,7 @@ global $CFG;
 $PAGE->set_context($context);
 $PAGE->set_heading($site->fullname);
 $PAGE->set_url(new moodle_url('/blocks/stat_book/view.php'));
-$PAGE->set_title(get_string('stat_booktitle', 'block_stat_book'));
+$PAGE->set_title(get_string('STAT_BOOK_TITLE', 'block_stat_book'));
 
 $navbar = init_stat_book_nav($PAGE);
 echo $OUTPUT->header();

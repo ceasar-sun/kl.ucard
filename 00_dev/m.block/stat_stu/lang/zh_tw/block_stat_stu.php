@@ -15,6 +15,6 @@ $string['STAT_STU_SEMTR'] = '學期';
 $string['STAT_STU_AYEAR'] = '年度';
 $string['STAT_STU_GRADE'] = '年級';
 $string['STAT_STU_COURSE'] = '科目';
-$string['stat_stutitle'] = '成績統計';
+$string['STAT_STU_TITLE'] = '成績統計';
 $string['pluginname'] = '成績統計';
 $string['nodata'] = '很抱歉沒有資料可呈現';

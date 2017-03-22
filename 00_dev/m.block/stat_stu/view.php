@@ -36,7 +36,7 @@ global $CFG;
 $PAGE->set_context($context);
 $PAGE->set_heading($site->fullname);
 $PAGE->set_url(new moodle_url('/blocks/stat_stu/view.php'));
-$PAGE->set_title(get_string('stat_stutitle', 'block_stat_stu'));
+$PAGE->set_title(get_string('STAT_STU_TITLE', 'block_stat_stu'));
 
 $navbar = init_stat_stu_nav($PAGE);
 echo $OUTPUT->header();
