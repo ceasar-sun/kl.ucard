@@ -103,6 +103,24 @@ if ($debug == 1){
 	<p>課程相關資訊</p>
 	<?php
 } // end of if debug
+$l_wall = TRUE;
+$l_tupid = 7;
+$l_pass = 0;
+$l_nopass = 0;
+foreach($courseids as $courseid){
+    $courseStatus=$ucard->getCompletionStatus($courseid, $moodleid);
+    if ($courseStatus === TRUE){
+	if ($ucard->getNextCourse($courseid) > $l_tupid){
+	    $l_pass++;
+	}else{
+	    $l_nopass++;
+	}
+    }
+}
+if ($l_nopass == 0){
+    $l_wall = FALSE;
+}
+if($debug==1){echo "level wall: $l_wall<br>\n";}
 foreach($courseids as $courseid){
     $courseStatus=$ucard->getCompletionStatus($courseid, $moodleid);
     $courseName = $ucard->getNameofCourse($courseid);
@@ -112,31 +130,33 @@ foreach($courseids as $courseid){
     if ($courseStatus === TRUE){
         $Jcourse[$courseName]="YES";
 	if($debug==1){echo "completion: TRUE\n";}
-	$newcourseid = $ucard->upgradeCourse($moodleid, $courseid, $location);
-	if(empty($newcourseid)){
-	    // release all course for this track
-	    $track = $ucard->getTrackbyCourse($courseid);
-	    $lastcourses = $ucard->getLastCourse($level, $track);
-	    foreach ($lastcourses as $cid){
-		$lastcourseid = $cid['id'];
-		$lastcoursestatus = $ucard->getCompletionStatus($lastcourseid, $moodleid);
-		if ($lastcoursestatus === False){
-		    $lastcourselevel = $ucard->getLevelbyCourse($lastcourseid);
-		    $ucard->registCourse($moodleid, $lastcourseid);
-		    $ucard->logRunningCourse($moodleid, $rfid_keyout, $location, $lastcourseid, $lastcourselevel);
-		    $lcname = $ucard->getNameofCourse($lastcourseid);
-		    if($debug==1){echo "\t\tlast course $lcname completion: FALSE\n";}
-		    $JUPcourse[$lcame]="UP";
+	if (($l_wall === FALSE) || (($l_wall === TRUE) && ($ucard->getNextCourse($courseid) < $l_tupid))){
+	    $newcourseid = $ucard->upgradeCourse($moodleid, $courseid, $location);
+	    if(empty($newcourseid)){
+		// release all course for this track
+		$track = $ucard->getTrackbyCourse($courseid);
+		$lastcourses = $ucard->getLastCourse($level, $track);
+		foreach ($lastcourses as $cid){
+		    $lastcourseid = $cid['id'];
+		    $lastcoursestatus = $ucard->getCompletionStatus($lastcourseid, $moodleid);
+		    if ($lastcoursestatus === False){
+			$lastcourselevel = $ucard->getLevelbyCourse($lastcourseid);
+			$ucard->registCourse($moodleid, $lastcourseid);
+			$ucard->logRunningCourse($moodleid, $rfid_keyout, $location, $lastcourseid, $lastcourselevel);
+			$lcname = $ucard->getNameofCourse($lastcourseid);
+			if($debug==1){echo "\t\tlast course $lcname completion: FALSE\n";}
+			$JUPcourse[$lcame]="UP";
+		    }
 		}
+	    }else{
+		$courselevel = $ucard->getLevelbyCourse($newcourseid);
+		$ucard->logRunningCourse($moodleid, $rfid_keyout, $location, $newcourseid, $courselevel);
+		$newcoursename = $ucard->getNameofCourse($newcourseid);
+		$JUPcourse[$newcoursename]="UP";
 	    }
-	}else{
-	    $courselevel = $ucard->getLevelbyCourse($newcourseid);
-	    $ucard->logRunningCourse($moodleid, $rfid_keyout, $location, $newcourseid, $courselevel);
-	    $newcoursename = $ucard->getNameofCourse($newcourseid);
-	    $JUPcourse[$newcoursename]="UP";
+	    $ucard->upgradeRunningCourse($moodleid, $courseid);
+	    if($debug==1){echo "upgrade done\n";}
 	}
-	$ucard->upgradeRunningCourse($moodleid, $courseid);
-	if($debug==1){echo "upgrade done\n";}
     } else if ($courseStatus === FALSE) {
 	if($debug==1){echo "completion: FALSE\n";}
         $Jcourse[$courseName]="NO";
