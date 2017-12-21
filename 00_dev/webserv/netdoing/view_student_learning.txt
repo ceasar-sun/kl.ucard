@@ -1,0 +1,6 @@
+SELECT     mdl_course.fullname, mdl_course_sections.name, mdl_user.lastname, mdl_user.firstname, mdl_grade_grades.timemodified, 
+                      mdl_grade_grades.finalgrade, mdl_course.idnumber AS classcode, mdl_user.username AS openid, mdl_grade_grades.id AS dataid
+FROM         mdl_course INNER JOIN
+                      mdl_course_sections ON mdl_course.id = mdl_course_sections.course INNER JOIN
+                      mdl_grade_grades ON mdl_course_sections.section = mdl_grade_grades.itemid INNER JOIN
+                      mdl_user ON mdl_grade_grades.userid = mdl_user.id
